@@ -1,5 +1,7 @@
 # devops-workshop
 
+Lær hvordan du deployer koden din til prod!
+
 # 🐳 Docker
 
 ## 📖 Før du begynner
