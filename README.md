@@ -20,7 +20,8 @@ Legg til det som mangler i `COPY`-steget i filen [Dockerfile](frontend/Dockerfil
 *HINT:* Vi bruker **yarn** for å bygge frontend'en.
 
 <details>
-<summary>Se fasit</summary>
+  <summary>✨ Se fasit</summary>
+
 ```dockerfile
 FROM alpine:latest
 
@@ -36,6 +37,7 @@ RUN yarn install
 
 ENTRYPOINT ["yarn", "serve"]
 ```
+
 </details>
 
 ### 🔨 Oppgave 2
@@ -71,7 +73,8 @@ men vi mangler noen steg. Fyll ut stegene som mangler for å kjøre testenen til
 *HINT:* Se hvordan de andre jobbene definerer steg.
 
 <details>
-<summary>✨ Se fasit</summary>
+  <summary>✨ Se fasit</summary>
+
 ```yaml
 run_tests:
   name: 'Run frontend tests'
@@ -89,6 +92,7 @@ run_tests:
     - name: Run tests
       run: yarn test
 ```
+
 </details>
 
 ### 🔨 Oppgave 2
@@ -96,7 +100,8 @@ run_tests:
 Vi vil også at bygg-steget ikke skal starte før testene har kjørt og har passert.
 Endre det slik at bygg-steget avhenger av test-steget for å kunne kjøre
 <details>
-<summary>✨ Se fasit</summary>
+  <summary>✨ Se fasit</summary>
+
 ```yaml
 build:
   name: 'Build Docker image and push to registry'
@@ -115,7 +120,8 @@ build:
         push: 'true'
         tags: '${{ env.MY_NAME }}-latest'
         file: './frontend/Dockerfile'
-  ```
+```
+
 </details>
 
 ### 🔨 Oppgave 3
@@ -125,37 +131,39 @@ Legg til et siste steg som kjører en Terraform kommando for å endre infrastruk
 
 <details>
   <summary>✨ Se fasit</summary>
-  ```yaml
-  deploy:
-    name: 'Deploy using Terraform'
-    runs-on: ubuntu-latest
-    depends-on: [build]
-    env:
-      TF_VAR_revision_suffix: ${{ github.sha }}
-      TF_VAR_my_name: ${{ env.MY_NAME }}
-      ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
-      ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
-    defaults:
-      run:
-        working-directory: './terraform'
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+```yaml
+deploy:
+  name: 'Deploy using Terraform'
+  runs-on: ubuntu-latest
+  depends-on: [build]
+  env:
+    TF_VAR_revision_suffix: ${{ github.sha }}
+    TF_VAR_my_name: ${{ env.MY_NAME }}
+    ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
+    ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+    ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
+    ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
+  defaults:
+    run:
+      working-directory: './terraform'
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Init Terraform
-        run: terraform init
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
 
-      - name: Set Terraform workspace
-        run: teraform workspace new $MY_NAME || terraform workspace select $MY_NAME
+    - name: Init Terraform
+      run: terraform init
 
-      - name: Run Terraform apply
-        run: terraform apply -auto-approve
-  ```
+    - name: Set Terraform workspace
+      run: teraform workspace new $MY_NAME || terraform workspace select $MY_NAME
+
+    - name: Run Terraform apply
+      run: terraform apply -auto-approve
+```
+
 </details>
 
 ### 🔨 Oppgave 4
@@ -185,35 +193,37 @@ Legg til en `template.container` i `azurerm_container_app`-ressursen i filen [ma
 
 <details>
   <summary>✨ Se fasit</summary>
-  ```hcl
-  resource "azurerm_container_app" "devops" {
-    name                         = "${var.my_name}-app"
-    container_app_environment_id = azurerm_container_app_environment.backend_env.id
-    resource_group_name          = azurerm_resource_group.devops
-    revision_mode                = "Single"
 
-    template {
-      container {
-        name   = "devops-workshop"
-        image  = "ghcr.io/computas/devops-workshop/${var.my_name}:latest"
-        cpu    = "0.25"
-        memory = "0.5Gi"
-      }
+```hcl
+resource "azurerm_container_app" "devops" {
+  name                         = "${var.my_name}-app"
+  container_app_environment_id = azurerm_container_app_environment.backend_env.id
+  resource_group_name          = azurerm_resource_group.devops
+  revision_mode                = "Single"
 
-      min_replicas    = 1
-      max_replicas    = 1
-      revision_suffix = substr(var.revision_suffix, 0, 10)
+  template {
+    container {
+      name   = "devops-workshop"
+      image  = "ghcr.io/computas/devops-workshop/${var.my_name}:latest"
+      cpu    = "0.25"
+      memory = "0.5Gi"
     }
 
-    ingress {
-      target_port      = "3000"
-      external_enabled = true
+    min_replicas    = 1
+    max_replicas    = 1
+    revision_suffix = substr(var.revision_suffix, 0, 10)
+  }
 
-      traffic_weight {
-        percentage      = 100
-        latest_revision = true
-      }
+  ingress {
+    target_port      = "3000"
+    external_enabled = true
+
+    traffic_weight {
+      percentage      = 100
+      latest_revision = true
     }
   }
-  ```
+}
+```
+
 </details>
