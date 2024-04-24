@@ -1,8 +1,12 @@
 # devops-workshop
 
-## Docker
+## 🐳 Docker
 
-### Oppgave 1
+### 📖 Før du begynner
+
+Installer Docker [herfra](https://docs.docker.com/engine/install).
+
+### 🔨 Oppgave 1
 
 Prøv å bygg et Docker image med denne kommandoen:
 
@@ -13,28 +17,28 @@ docker build . -t devops-workshop:latest
 Du ser at den feiler, og det virker som den mangler en fil (eller filer?) for å bygge frontend'en.
 Legg til det som mangler i `COPY`-steget i filen [Dockerfile](frontend/Dockerfile).
 
-*HINT:* Vi bruker `yarn` for å bygge frontend'en.
+*HINT:* Vi bruker **yarn** for å bygge frontend'en.
 
 <details>
-    <summary>Se fasit</summary>
-        ```dockerfile
-        FROM alpine:latest
+<summary>Se fasit</summary>
+```dockerfile
+FROM alpine:latest
 
-        WORKDIR /app
+WORKDIR /app
 
-        RUN apk update && \
-            apk add yarn
+RUN apk update && \
+    apk add yarn
 
-        # Legg til `yarn.lock`:
-        COPY package.json index.html yarn.lock ./
+# Legg til `yarn.lock`:
+COPY package.json index.html yarn.lock ./
 
-        RUN yarn install
+RUN yarn install
 
-        ENTRYPOINT ["yarn", "serve"]
-        ```
+ENTRYPOINT ["yarn", "serve"]
+```
 </details>
 
-### Oppgave 2
+### 🔨 Oppgave 2
 
 Prøv å kjør applikasjonen med denne kommandoen:
 
@@ -45,11 +49,11 @@ docker run -it -p 3000:3000 devops-workshop:latest
 Da skal du kunne gå i nettleseren å se noe på `http://localhost:3000`!
 
 
-## GitHub Actions
+## ▶️ GitHub Actions
 
 Disse oppgavene gjøres i filen [.github/workflows/deploy.yml](.github/workflows/deploy.yml).
 
-### Før du begynner
+### 📖 Før du begynner
 
 Sjekk ut en git branch som starter med `workshop/` og legg til navnet ditt, f.eks.:
 
@@ -57,7 +61,9 @@ Sjekk ut en git branch som starter med `workshop/` og legg til navnet ditt, f.ek
 git checkout -b workshop/andreas-b
 ```
 
-### Oppgave 1
+**DET ER VIKTIG AT INGEN ANDRE HAR EN BRANCH MED SAMME NAVN!**
+
+### 🔨 Oppgave 1
 
 Vi vil gjerne kjøre testene våre for frontend'en i GitHub Actions,
 men vi mangler noen steg. Fyll ut stegene som mangler for å kjøre testenen til frontend'en.
@@ -65,60 +71,60 @@ men vi mangler noen steg. Fyll ut stegene som mangler for å kjøre testenen til
 *HINT:* Se hvordan de andre jobbene definerer steg.
 
 <details>
-  <summary>Se fasit</summary>
-  ```yaml
-  run_tests:
-    name: 'Run frontend tests'
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: './frontend'
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+<summary>✨ Se fasit</summary>
+```yaml
+run_tests:
+  name: 'Run frontend tests'
+  runs-on: ubuntu-latest
+  defaults:
+    run:
+      working-directory: './frontend'
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: yarn install
+    - name: Install dependencies
+      run: yarn install
 
-      - name: Run tests
-        run: yarn test
-  ```
+    - name: Run tests
+      run: yarn test
+```
 </details>
 
-### Oppgave 2
+### 🔨 Oppgave 2
 
 Vi vil også at bygg-steget ikke skal starte før testene har kjørt og har passert.
 Endre det slik at bygg-steget avhenger av test-steget for å kunne kjøre
 <details>
-  <summary>Se fasit</summary>
-  ```yaml
-  build:
-    name: 'Build Docker image and push to registry'
-    depends-on: [set_name, run_tests]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+<summary>✨ Se fasit</summary>
+```yaml
+build:
+  name: 'Build Docker image and push to registry'
+  depends-on: [set_name, run_tests]
+  runs-on: ubuntu-latest
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
 
-      - name: Build and push image to registry
-        uses: docker/build-push-action@v5
-        with:
-          push: 'true'
-          tags: '${{ env.MY_NAME }}-latest'
-          file: './frontend/Dockerfile'
-    ```
+    - name: Build and push image to registry
+      uses: docker/build-push-action@v5
+      with:
+        push: 'true'
+        tags: '${{ env.MY_NAME }}-latest'
+        file: './frontend/Dockerfile'
+  ```
 </details>
 
-### Oppgave 3
+### 🔨 Oppgave 3
 
 Vi har lyst til å deploye med Terraform.
 Legg til et siste steg som kjører en Terraform kommando for å endre infrastrukturen vår.
 
 <details>
-  <summary>Se fasit</summary>
+  <summary>✨ Se fasit</summary>
   ```yaml
   deploy:
     name: 'Deploy using Terraform'
@@ -152,14 +158,16 @@ Legg til et siste steg som kjører en Terraform kommando for å endre infrastruk
   ```
 </details>
 
-### Oppgave 4
+### 🔨 Oppgave 4
 
 Push branchen din til GitHub og sjekk ut om den kjører.
 
 
-## Terraform
+## 🏗️ Terraform
 
-### Før du begynner
+### 📖 Før du begynner
+
+Installer Terraform [her](https://developer.hashicorp.com/terraform/install).
 
 For å kunne kjøre Terraform lokalt kjøre denne kommandoen i mappen [terraform](terraform):
 
@@ -167,16 +175,16 @@ For å kunne kjøre Terraform lokalt kjøre denne kommandoen i mappen [terraform
 terraform init
 ```
 
-### Oppgave 1
+### 🔨 Oppgave 1
 
 Kjør en lokal `plan`. Dette kommer til å feile.
 
-### Oppgave 2
+### 🔨 Oppgave 2
 
-Legg til en `template.container`
+Legg til en `template.container` i `azurerm_container_app`-ressursen i filen [main.tf](terraform/main.tf).
 
 <details>
-  <summary>Se fasit</summary>
+  <summary>✨ Se fasit</summary>
   ```hcl
   resource "azurerm_container_app" "devops" {
     name                         = "${var.my_name}-app"

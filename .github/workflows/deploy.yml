@@ -18,25 +18,28 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: './frontend'
+        working-directory: 'frontend'
     steps:
       - name: Checkout repository
         # Task A.1:
         #
         # Answer A.1:
         uses: actions/checkout@v4
+        #
 
       - name: Install dependencies
         # Task A.1:
         #
         # Answer A.1:
         run: yarn install
+        #
 
       - name: Run tests
         # Task A.1:
         #
         # Answer A.1:
         run: yarn test
+        #
 
   build:
     name: 'Build Docker image and push to registry'
@@ -44,6 +47,7 @@ jobs:
     # depends-on: [set_name]
     # Answer A.2:
     depends-on: [set_name, run_tests]
+    #
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -56,8 +60,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: 'true'
-          tags: 'ghcr.io/computas/devops-workshop/${{ env.MY_NAME }}:latest'
-          file: './frontend/Dockerfile'
+          tags: 'ghcr.io/${{ github.repository }}/${{ env.MY_NAME }}:latest'
+          file: 'frontend/Dockerfile'
 
   deploy:
     name: 'Deploy using Terraform'
@@ -72,7 +76,7 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
     defaults:
       run:
-        working-directory: './terraform'
+        working-directory: 'terraform'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -94,3 +98,4 @@ jobs:
         #
         # Answer A.3
         run: terraform apply -auto-approve
+        #

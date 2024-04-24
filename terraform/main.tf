@@ -20,12 +20,16 @@ resource "azurerm_container_app" "devops" {
   revision_mode                = "Single"
 
   template {
+    # Task T.2:
+    #
+    # Answer T.2:
     container {
       name   = "devops-workshop"
       image  = "ghcr.io/computas/devops-workshop/${var.my_name}:latest"
       cpu    = "0.25"
       memory = "0.5Gi"
     }
+    #
 
     min_replicas    = 1
     max_replicas    = 1
