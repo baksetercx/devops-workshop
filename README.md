@@ -1,6 +1,6 @@
 # devops-workshop
 
-Lær hvordan du deployer koden din til prod!
+Lær hvordan du [deployer](https://teknisk-ordbok.fly.dev/ordbok/Deploy) koden din til [prod](https://teknisk-ordbok.fly.dev/ordbok/Produksjon)!
 
 # 🐳 Docker
 
@@ -8,7 +8,7 @@ Lær hvordan du deployer koden din til prod!
 
 Installer Docker [herfra](https://docs.docker.com/engine/install).
 
-## 🔨 Oppgave 1
+## 🔨 Oppgave 1.1
 
 Prøv å bygg et Docker image med denne kommandoen:
 
@@ -42,7 +42,7 @@ ENTRYPOINT ["yarn", "serve"]
 
 </details>
 
-## 🔨 Oppgave 2
+## 🔨 Oppgave 1.2
 
 Prøv å kjør applikasjonen med denne kommandoen:
 
@@ -67,7 +67,7 @@ git checkout -b workshop/andreas-b
 
 **DET ER VIKTIG AT INGEN ANDRE HAR EN BRANCH MED SAMME NAVN!**
 
-## 🔨 Oppgave 1
+## 🔨 Oppgave 2.1
 
 Vi vil gjerne kjøre testene våre for frontend'en i GitHub Actions,
 men vi mangler noen steg. Fyll ut stegene som mangler for å kjøre testenen til frontend'en.
@@ -97,7 +97,7 @@ run_tests:
 
 </details>
 
-## 🔨 Oppgave 2
+## 🔨 Oppgave 2.2
 
 Vi vil også at bygg-steget ikke skal starte før testene har kjørt og har passert.
 Endre det slik at bygg-steget avhenger av test-steget for å kunne kjøre
@@ -126,7 +126,7 @@ build:
 
 </details>
 
-## 🔨 Oppgave 3
+## 🔨 Oppgave 2.3
 
 Vi har lyst til å deploye med Terraform.
 Legg til et siste steg som kjører en Terraform kommando for å endre infrastrukturen vår.
@@ -168,7 +168,7 @@ deploy:
 
 </details>
 
-## 🔨 Oppgave 4
+## 🔨 Oppgave 2.4
 
 Push branchen din til GitHub og sjekk ut om den kjører.
 
@@ -185,11 +185,11 @@ For å kunne kjøre Terraform lokalt kjøre denne kommandoen i mappen [terraform
 terraform init
 ```
 
-## 🔨 Oppgave 1
+## 🔨 Oppgave 3.1
 
 Kjør en lokal `plan`. Dette kommer til å feile.
 
-## 🔨 Oppgave 2
+## 🔨 Oppgave 3.2
 
 Legg til en `template.container` i `azurerm_container_app`-ressursen i filen [main.tf](terraform/main.tf).
 
