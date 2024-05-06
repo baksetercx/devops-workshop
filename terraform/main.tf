@@ -25,7 +25,7 @@ resource "azurerm_container_app" "devops" {
     # Answer T.2:
     container {
       name   = "devops-workshop"
-      image  = "ghcr.io/computas/devops-workshop/${var.my_name}:latest"
+      image  = "ghcr.io/${var.repository}/${var.my_name}:latest"
       cpu    = "0.25"
       memory = "0.5Gi"
     }

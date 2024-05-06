@@ -9,12 +9,6 @@ create() {
     local location="$4"
     local subscription_id="$5"
 
-    # Create service principal
-    az ad sp create-for-rbac \
-        --name "terraform" \
-        --role "Contributor" \
-        --scopes "/subscriptions/$subscription_id"
-
     # Create resource group
     az group create \
         --name "$resource_group_name" \
@@ -78,11 +72,6 @@ delete() {
     az group delete \
         --name "$resource_group_name" \
         --yes
-
-    # Delete service principal
-    local sp_name
-    sp_name=$(az ad sp list --display-name terraform --query '[0].appId' -o tsv)
-    az ad sp delete --id "$sp_name"
 }
 
 main() {
