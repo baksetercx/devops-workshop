@@ -179,15 +179,12 @@ Push branchen din til GitHub og sjekk ut om den kjører.
 
 Installer Terraform [her](https://developer.hashicorp.com/terraform/install).
 
-For å kunne kjøre Terraform lokalt kjøre denne kommandoen i mappen [terraform](terraform):
-
-```bash
-terraform init
-```
+I denne workshoppen har dere ikke mulighet til å kjøre Terraform lokalt,
+men du kan pushe til branch'en din og se på output fra GitHub Actions.
 
 ## 🔨 Oppgave 3.1
 
-Kjør en lokal `plan`. Dette kommer til å feile.
+Se på output fra GitHub Actions i steget `deploy`. Her kan du se hva Terraform har tenkt til å lage.
 
 ## 🔨 Oppgave 3.2
 
@@ -229,3 +226,19 @@ resource "azurerm_container_app" "devops" {
 ```
 
 </details>
+
+# Setup (ikke en del av workshop'en)
+
+1. Få tak i en Azure subscription. Pass på at provider `Microsoft.App` er registrert i subscription'en din.
+Se [her](https://learn.microsoft.com/en-us/azure/azure-resource-manager/troubleshooting/error-register-resource-provider?tabs=azure-cli) for mer informasjon,
+evt. kjør kommandoen `az provider register --namespace Microsoft.App` for å registrere den.
+
+2. Lag en ny Storage Account i Azure for å lagre Terraform state.
+Bruk skriptet `bootstrap.sh` for å sette opp en ny Storage Account, som vil lages i resource group `tfstate`.
+
+3. Lag en App Registration i Entra, og pek den mot riktig GitHub repository/environment. Se [link]().
+Du kan bruke `prod` som environment, det er det som brukes i `.github/workflows/deploy.yml`.
+Gi den `Contributor`-tilgang til subscription'en din.
+
+4. Hent ut client ID fra App Registration og legg den i GitHub repository variables under `ARM_CLIENT_ID`.
+Hent også ut subscription ID og tentant ID og legg de i GitHub repository variables under `ARM_SUBSCRIPTION_ID` og `ARM_TENANT_ID`.
