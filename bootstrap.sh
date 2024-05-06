@@ -1,8 +1,8 @@
 #!/bin/bash
 
-set -eou pipefail
+set -eo pipefail
 
-bootstrap() {
+create() {
     local resource_group_name="$1"
     local storage_account_name="$2"
     local container_name="$3"
@@ -32,25 +32,25 @@ bootstrap() {
         --name "$container_name" \
         --account-name "$storage_account_name"
 
-    cat << EOF > providers.tf
+    cat << EOF > terraform/providers.tf
 terraform {
-    required_providers {
-        azurerm = {
-            source  = "hashicorp/azurerm"
-            version = "~> 3.0"
-        }
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 3.0"
     }
+  }
 
-    backend "azurerm" {
-        resource_group_name   = "$resource_group_name"
-        storage_account_name  = "$storage_account_name"
-        container_name        = "$container_name"
-        key                   = "terraform.tfstate"
-    }
+  backend "azurerm" {
+    resource_group_name   = "$resource_group_name"
+    storage_account_name  = "$storage_account_name"
+    container_name        = "$container_name"
+    key                   = "terraform.tfstate"
+  }
 }
 
 provider "azurerm" {
-    features {}
+  features {}
 }
 EOF
 
@@ -93,17 +93,17 @@ main() {
     local storage_account_name
     storage_account_name="tfstate$RANDOM"
 
-    if [[ "$1" == "bootstrap" ]]; then
+    if [[ "$1" == "create" ]]; then
         if [[ -z "$2" ]]; then
-            echo "Usage: $0 bootstrap <subscription_id>"
+            echo "Usage: $0 create <subscription_id>"
             exit 1
         else
-            bootstrap "$resource_group_name" "$storage_account_name" "$container_name" "$location" "$2"
+            create "$resource_group_name" "$storage_account_name" "$container_name" "$location" "$2"
         fi
     elif [[ "$1" == "delete" ]]; then
         delete "$resource_group_name" "$storage_account_name" "$container_name"
     else
-        echo "Usage: $0 [bootstrap|delete]"
+        echo "Usage: $0 [create|delete]"
         exit 1
     fi
 }

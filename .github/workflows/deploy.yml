@@ -44,9 +44,9 @@ jobs:
   build:
     name: 'Build Docker image and push to registry'
     # Task A.2:
-    # depends-on: [set_name]
+    # needs: [set_name]
     # Answer A.2:
-    depends-on: [set_name, run_tests]
+    needs: [set_name, run_tests]
     #
     runs-on: ubuntu-latest
     steps:
@@ -66,14 +66,14 @@ jobs:
   deploy:
     name: 'Deploy using Terraform'
     runs-on: ubuntu-latest
-    depends-on: [build]
+    needs: [build]
     env:
       TF_VAR_revision_suffix: ${{ github.sha }}
       TF_VAR_my_name: ${{ env.MY_NAME }}
       ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
-      ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
     defaults:
       run:
         working-directory: 'terraform'

@@ -8,15 +8,15 @@ resource "azurerm_resource_group" "devops" {
 }
 
 resource "azurerm_container_app_environment" "devops" {
-  name                = "${azurerm_resource_group.devops}-env"
+  name                = "${azurerm_resource_group.devops.name}-env"
   location            = local.location
-  resource_group_name = azurerm_resource_group.devops
+  resource_group_name = azurerm_resource_group.devops.name
 }
 
 resource "azurerm_container_app" "devops" {
   name                         = "${var.my_name}-app"
-  container_app_environment_id = azurerm_container_app_environment.backend_env.id
-  resource_group_name          = azurerm_resource_group.devops
+  container_app_environment_id = azurerm_container_app_environment.devops.id
+  resource_group_name          = azurerm_resource_group.devops.name
   revision_mode                = "Single"
 
   template {
