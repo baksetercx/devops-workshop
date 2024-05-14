@@ -60,7 +60,7 @@ jobs:
   deploy:
     name: 'Deploy using Terraform'
     runs-on: ubuntu-latest
-    needs: [build, setup]
+    needs: [build]
     env:
       TF_VAR_revision_suffix: ${{ github.sha }}
       TF_VAR_my_name: ${{ github.ref_name }}
