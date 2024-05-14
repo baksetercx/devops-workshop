@@ -10,9 +10,10 @@ Installer Docker [herfra](https://docs.docker.com/engine/install).
 
 ## 🔨 Oppgave 1.1
 
-Prøv å bygg et Docker image med denne kommandoen:
+Prøv å bygg et Docker image slik:
 
 ```bash
+cd frontend
 docker build . -t devops-workshop:latest
 ```
 
@@ -50,29 +51,29 @@ Prøv å kjør applikasjonen med denne kommandoen:
 docker run -it -p 3000:3000 devops-workshop:latest
 ```
 
-Da skal du kunne gå i nettleseren å se noe på `http://localhost:3000`!
+Da skal du kunne gå i nettleseren og se noe på `http://localhost:3000`!
 
 
 # ▶️ GitHub Actions
 
-Disse oppgavene gjøres i filen [.github/workflows/deploy.yml](.github/workflows/deploy.yml).
+Disse oppgavene gjøres i filen [deploy.yml](.github/workflows/deploy.yml).
 
 ## 📖 Før du begynner
 
-Sjekk ut en git branch som starter med `workshop/` og legg til navnet ditt, f.eks.:
+Sjekk ut en git branch med navnet ditt:
 
 ```bash
-git checkout -b workshop/andreas-b
+git checkout -b andreas-bakseter
 ```
 
 **DET ER VIKTIG AT INGEN ANDRE HAR EN BRANCH MED SAMME NAVN!**
 
 ## 🔨 Oppgave 2.1
 
-Vi vil gjerne kjøre testene våre for frontend'en i GitHub Actions,
-men vi mangler noen steg. Fyll ut stegene som mangler for å kjøre testenen til frontend'en.
+Vi vil gjerne kjøre testene våre for frontend'en i GitHub Actions, men vi mangler noen steg.
+Fyll ut stegene som mangler for å kjøre testenen til frontend'en.
 
-*HINT:* Se hvordan de andre jobbene definerer steg.
+*HINT:* Se hvordan de andre jobbene definerer steg (i listen under `steps`).
 
 <details>
   <summary>✨ Se fasit</summary>
@@ -100,7 +101,8 @@ run_tests:
 ## 🔨 Oppgave 2.2
 
 Vi vil også at bygg-steget ikke skal starte før testene har kjørt og har passert.
-Endre det slik at bygg-steget avhenger av test-steget for å kunne kjøre
+Endre det slik at bygg-steget avhenger av test-steget for å kunne kjøre.
+
 <details>
   <summary>✨ Se fasit</summary>
 
@@ -126,7 +128,61 @@ build:
 
 </details>
 
-## 🔨 Oppgave 2.3
+# 🏗️ Terraform
+
+## 📖 Før du begynner
+
+Installer Terraform [her](https://developer.hashicorp.com/terraform/install).
+
+For å kunne kjøre Terraform lokalt kjøre denne kommandoen i mappen [terraform](terraform):
+
+```bash
+terraform init
+```
+
+## 🔨 Oppgave 3.1
+
+
+
+## 🔨 Oppgave 3.2
+
+Legg til en `template.container` i `azurerm_container_app`-ressursen i filen [main.tf](terraform/main.tf).
+
+<details>
+  <summary>✨ Se fasit</summary>
+
+```hcl
+resource "azurerm_container_app" "devops" {
+  name                         = "${var.my_name}-app"
+  container_app_environment_id = azurerm_container_app_environment.backend_env.id
+  resource_group_name          = azurerm_resource_group.devops
+  revision_mode                = "Single"
+
+  template {
+    container {
+      name   = "devops-workshop"
+      image  = "ghcr.io/computas/devops-workshop/${var.my_name}:latest"
+      cpu    = "0.25"
+      memory = "0.5Gi"
+    }
+
+    min_replicas    = 1
+    max_replicas    = 1
+    revision_suffix = substr(var.revision_suffix, 0, 10)
+  }
+
+  ingress {
+    target_port      = "3000"
+    external_enabled = true
+
+    traffic_weight {
+      percentage      = 100
+      latest_revision = true
+    }
+  }
+}
+```
+## 🔨 Oppgave 3.3
 
 Vi har lyst til å deploye med Terraform.
 Legg til et siste steg som kjører en Terraform kommando for å endre infrastrukturen vår.

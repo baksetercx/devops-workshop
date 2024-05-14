@@ -1,0 +1,37 @@
+name: 'Destroy Terraform resources'
+
+on:
+  pull_request:
+    branches: [master]
+    types: [closed]
+
+jobs:
+  destroy:
+    name: 'Destroy Terraform resources'
+    runs-on: ubuntu-latest
+    env:
+      TF_VAR_revision_suffix: ${{ github.sha }}
+      TF_VAR_my_name: ${{ github.ref_name }}
+      TF_VAR_repository: ${{ github.repository }}
+      ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+    defaults:
+      run:
+        working-directory: 'terraform'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Init Terraform
+        run: terraform init
+
+      - name: Delete workspace and destroy resources
+        run: |
+          (terraform workspace select $MY_NAME && \
+           terraform destroy -auto-approve && \
+           terraform workspace delete $MY_NAME) || echo "No workspace to destroy"

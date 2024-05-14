@@ -1,22 +1,10 @@
 name: 'Deploy'
 
 on:
-  push:
-    branches: ['workshop/*']
+  pull_request:
+    branches: [master]
 
 jobs:
-  setup:
-    name: 'Setup'
-    outputs:
-      my_name: ${{ steps.set-name.outputs.my_name }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: 'Setup'
-        id: set-name
-        run: echo "my_name=${BRANCH##*/}" >> "$GITHUB_OUTPUT"
-        env:
-          BRANCH: ${{ github.ref_name }}
-
   run-tests:
     name: 'Run frontend tests'
     runs-on: ubuntu-latest
@@ -25,32 +13,24 @@ jobs:
         working-directory: 'frontend'
     steps:
       - name: Checkout repository
-        # Task A.1:
-        #
-        # Answer A.1:
         uses: actions/checkout@v4
-        #
 
+      # Task A.1:
+      #
+      # Answer A.1:
       - name: Install dependencies
-        # Task A.1:
-        #
-        # Answer A.1:
         run: yarn install
-        #
 
       - name: Run tests
-        # Task A.1:
-        #
-        # Answer A.1:
         run: yarn test
-        #
+      #
 
   build:
     name: 'Build Docker image and push to registry'
     # Task A.2:
-    # needs: [setup]
+    #
     # Answer A.2:
-    needs: [setup, run-tests]
+    needs: [run-tests]
     #
     runs-on: ubuntu-latest
     permissions:
@@ -74,7 +54,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: 'true'
-          tags: 'ghcr.io/${{ github.repository }}/${{ needs.setup.outputs.my_name }}:latest'
+          tags: 'ghcr.io/${{ github.repository }}/${{ github.ref_name }}:latest'
           context: 'frontend'
 
   deploy:
@@ -83,7 +63,7 @@ jobs:
     needs: [build, setup]
     env:
       TF_VAR_revision_suffix: ${{ github.sha }}
-      TF_VAR_my_name: ${{ needs.setup.outputs.my_name }}
+      TF_VAR_my_name: ${{ github.ref_name }}
       TF_VAR_repository: ${{ github.repository }}
       ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
       ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}

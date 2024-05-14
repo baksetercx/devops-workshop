@@ -22,6 +22,9 @@ resource "azurerm_container_app" "devops" {
   template {
     # Task T.2:
     #
+    # container {
+    #  image  = "ghcr.io/${var.repository}/${var.my_name}:latest"
+    }
     # Answer T.2:
     container {
       name   = "devops-workshop"
