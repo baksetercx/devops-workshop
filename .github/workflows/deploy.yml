@@ -54,7 +54,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: 'true'
-          tags: 'ghcr.io/${{ github.repository }}/${{ github.ref_name }}:latest'
+          tags: 'ghcr.io/${{ github.repository }}/${{ github.head_ref }}:latest'
           context: 'frontend'
 
   deploy:
@@ -63,7 +63,7 @@ jobs:
     needs: [build]
     env:
       TF_VAR_revision_suffix: ${{ github.sha }}
-      TF_VAR_my_name: ${{ github.ref_name }}
+      TF_VAR_my_name: ${{ github.head_ref }}
       TF_VAR_repository: ${{ github.repository }}
       ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
       ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}

@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TF_VAR_revision_suffix: ${{ github.sha }}
-      TF_VAR_my_name: ${{ github.ref_name }}
+      TF_VAR_my_name: ${{ github.head_ref }}
       TF_VAR_repository: ${{ github.repository }}
       ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
@@ -33,5 +33,6 @@ jobs:
       - name: Delete workspace and destroy resources
         run: |
           (terraform workspace select $MY_NAME && \
+           terraform destroy -auto-approve && \
            terraform destroy -auto-approve && \
            terraform workspace delete $MY_NAME) || echo "No workspace to destroy"
