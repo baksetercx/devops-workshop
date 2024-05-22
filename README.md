@@ -276,6 +276,12 @@ deploy:
 Se på `Outputs` under **Run Terraform apply** i loggen til GitHub Actions.
 Her skal du finne en link til applikasjonen din.
 
+## 🏁 Ferdig!
+
+Når du er ferdig med oppgavene, lukk pull request'en din.
+Det vil da kjøre en siste jobb som sletter ressursene som ble laget i Azure.
+Sjekk logger på GitHub Actions for å se at det fungerer!
+
 # 🤓 Setup for spesielt interesserte (ikke en del av workshop'en)
 
 1. Få tak i en Azure subscription. Pass på at provider `Microsoft.App` er registrert i subscription'en din.
