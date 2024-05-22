@@ -221,6 +221,8 @@ resource "azurerm_container_app" "devops" {
 Vi har lyst til å deploye med Terraform.
 Legg til et siste steg som kjører en Terraform kommando for å endre infrastrukturen vår.
 
+Push så til branchen din og se om det fungerer!
+
 <details>
   <summary>✨ Se fasit</summary>
 
@@ -228,17 +230,22 @@ Legg til et siste steg som kjører en Terraform kommando for å endre infrastruk
 deploy:
   name: 'Deploy using Terraform'
   runs-on: ubuntu-latest
-  depends-on: [build]
+  needs: [build]
   env:
     TF_VAR_revision_suffix: ${{ github.sha }}
-    TF_VAR_my_name: ${{ env.MY_NAME }}
+    TF_VAR_my_name: ${{ github.head_ref }}
+    TF_VAR_repository: ${{ github.repository }}
     ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
-    ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
     ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
-    ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
+    ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+    ARM_USE_OIDC: 'true'
+  permissions:
+    contents: read
+    id-token: write
+  environment: prod
   defaults:
     run:
-      working-directory: './terraform'
+      working-directory: 'terraform'
   steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -250,11 +257,19 @@ deploy:
       run: terraform init
 
     - name: Set Terraform workspace
-      run: teraform workspace new $MY_NAME || terraform workspace select $MY_NAME
+      run: terraform workspace new $TF_VAR_my_name || terraform workspace select $TF_VAR_my_name
+
+    - name: Run Terraform plan
+      run: terraform plan
 
     - name: Run Terraform apply
       run: terraform apply -auto-approve # legger til denne linjen
 ```
+
+## 🔨 Oppgave 3.4
+
+Se på `Outputs` under **Run Terraform apply** i loggen til GitHub Actions.
+Her skal du finne en link til applikasjonen din.
 
 </details>
 
