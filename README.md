@@ -37,10 +37,10 @@ WORKDIR /app
 RUN apk update && \
     apk add yarn
 
-# legger til `package.json`
+# legger til `package.json`:
 COPY yarn.lock index.html package.json ./
 
-RUN yarn install --from-lockfile
+RUN yarn install --frozen-lockfile
 
 ENTRYPOINT ["yarn", "serve"]
 ```
