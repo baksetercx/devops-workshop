@@ -65,10 +65,11 @@ git checkout -b andreas-bakseter
 
 **PASS PÅ AT INGEN ANDRE HAR EN BRANCH MED SAMME NAVN SOM DEG!**
 
-Hver gang du vil teste endringer, push branchen din til GitHub:
+Hver gang du vil teste endringer, push de til branchen din:
 
 ```bash
-git push -u origin andreas-bakseter
+git push -u origin andreas-bakseter # første gang
+git push # senere
 ```
 
 ...og lag en pull request mot `master`-branchen.
@@ -76,7 +77,7 @@ git push -u origin andreas-bakseter
 Da vil du se at GitHub Actions vil kjøre jobbene dine, og du kan se output.
 Hver gang du vil teste endringer, push branchen din til GitHub.
 
-_TIPS:_ istedenfor å lage flere commits, kan du bruke `git add .` og `git commit --amend` for å legge til nye endringer i forrige commit,
+💡 _TIPS:_ istedenfor å lage flere commits, kan du bruke `git add .` og `git commit --amend` for å legge til nye endringer i forrige commit,
 for å så pushe med `git push --force`. Dette er en god praksis for å holde git-historikken ren når du til slutt merger til `master`.
 
 ## 🔨 Oppgave 2.1
@@ -85,7 +86,7 @@ Vi vil gjerne kjøre testene våre for frontend'en i GitHub Actions, men vi mang
 Fyll ut stegene som mangler for å kjøre testenen til frontend'en.
 Det er bare å pushe til branchen din og se om det fungerer underveis!
 
-_HINT:_ Se hvordan de andre jobbene definerer steg (i listen under `steps`).
+💡 _HINT:_ Se hvordan de andre jobbene definerer steg (i listen under `steps`).
 
 <details>
   <summary>✨ Se fasit</summary>
@@ -167,15 +168,17 @@ men du kan pushe til branch'en din og se på output fra GitHub Actions.
 
 ## 🔨 Oppgave 3.1
 
-Se på output fra GitHub Actions i steget `deploy`. Her kan du se hva Terraform har tenkt til å lage.
+Se på output fra GitHub Actions i steget `deploy`. Her kan du se at Terraform feiler fordi det mangler noen attributter i en ressurs.
+Vanligvis ville du sett hva Terraform har tenkt til å gjøre (en `plan`).
 
 ## 🔨 Oppgave 3.2
 
 Det mangler noen felter i `azurerm_container_app`-ressursen i filen [main.tf](terraform/main.tf).
 Legg til de feltene som mangler for å kunne deploye applikasjonen.
-Push til branchen din og se om det fungerer!
 
-_HINT:_ Les [dokumentasjonen](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_app) til `azurerm_container_app`.
+Push så til branchen din og se om det fungerer!
+
+💡 _HINT:_ Les [dokumentasjonen](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_app) til `azurerm_container_app`.
 
 <details>
   <summary>✨ Se fasit</summary>
@@ -223,8 +226,8 @@ Legg til et siste steg i `deploy`-jobben som kjører en Terraform kommando for �
 
 Push så til branchen din og se om det fungerer!
 
-_HINT:_ Se på dokumentasjonen til [Terraform](https://developer.hashicorp.com/terraform/cli/run),
-eller kjør `terraform -help` i terminalen om du har Terraform installert lokalt.
+💡 _HINT:_ Se på dokumentasjonen til [Terraform](https://developer.hashicorp.com/terraform/cli/run),
+eller kjør `terraform -help` i terminalen dersom du har Terraform installert lokalt.
 
 <details>
   <summary>✨ Se fasit</summary>
@@ -280,7 +283,9 @@ Her skal du finne en link til applikasjonen din.
 
 Når du er ferdig med oppgavene, lukk pull request'en din.
 Det vil da kjøre en siste jobb som sletter ressursene som ble laget i Azure.
-Sjekk logger på GitHub Actions for å se at det fungerer!
+
+Du kan sjekke logger i GitHub Actions for å se at det fungerer!
+
 
 # 🤓 Setup for spesielt interesserte (ikke en del av workshop'en)
 
