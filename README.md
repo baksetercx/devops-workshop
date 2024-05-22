@@ -221,9 +221,12 @@ resource "azurerm_container_app" "devops" {
 ## 🔨 Oppgave 3.3
 
 Vi har lyst til å deploye med Terraform.
-Legg til et siste steg som kjører en Terraform kommando for å endre infrastrukturen vår.
+Legg til et siste steg i `deploy`-jobben som kjører en Terraform kommando for å lage infrastrukturen vår.
 
 Push så til branchen din og se om det fungerer!
+
+_HINT:_ Se på dokumentasjonen til [Terraform](https://developer.hashicorp.com/terraform/cli/run),
+eller kjør `terraform -help` i terminalen om du har Terraform installert lokalt.
 
 <details>
   <summary>✨ Se fasit</summary>
