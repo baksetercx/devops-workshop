@@ -92,10 +92,10 @@ jobs:
       - name: Run Terraform plan
         run: terraform plan
 
-    # Task 3.3
-    #
-    # # - name: Run Terraform apply
-    # Answer 3.3
+      # Task 3.3
+      #
+      # # - name: Run Terraform apply
+      # Answer 3.3
       - name: Run Terraform apply
         run: terraform apply -auto-approve
     #
