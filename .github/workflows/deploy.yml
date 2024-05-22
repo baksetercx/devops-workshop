@@ -15,23 +15,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Task A.1:
-      #
-      # Answer A.1:
-      - name: Install dependencies
-        run: yarn install
-
-      - name: Run tests
-        run: yarn test
-      #
+      # legg til manglende steg her:
 
   build:
     name: 'Build Docker image and push to registry'
-    # Task A.2:
-    #
-    # Answer A.2:
-    needs: [run-tests]
-    #
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -92,9 +79,4 @@ jobs:
       - name: Run Terraform plan
         run: terraform plan
 
-      - name: Run Terraform apply
-        # Task A.3
-        #
-        # Answer A.3
-        run: terraform apply -auto-approve
-        #
+    # - name: Run Terraform apply
