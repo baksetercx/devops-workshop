@@ -38,4 +38,5 @@ jobs:
         run: |
           (terraform workspace select $TF_VAR_my_name && \
            terraform destroy -auto-approve && \
+           terraform wokspace select default && \
            terraform workspace delete $TF_VAR_my_name) || echo "No workspace to destroy"
