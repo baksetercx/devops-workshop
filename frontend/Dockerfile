@@ -5,8 +5,8 @@ WORKDIR /app
 RUN apk update && \
     apk add yarn
 
-COPY package.json index.html ./
+COPY yarn.lock index.html ./
 
-RUN yarn install
+RUN yarn install --frozen-lockfile
 
 ENTRYPOINT ["yarn", "serve"]
