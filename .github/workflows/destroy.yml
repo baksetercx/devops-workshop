@@ -14,9 +14,9 @@ jobs:
       TF_VAR_my_name: ${{ github.head_ref }}
       TF_VAR_repository: ${{ github.repository }}
       ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+      ARM_USE_OIDC: 'true'
     defaults:
       run:
         working-directory: 'terraform'

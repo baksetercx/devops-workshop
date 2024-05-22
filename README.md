@@ -221,6 +221,8 @@ resource "azurerm_container_app" "devops" {
 Vi har lyst til å deploye med Terraform.
 Legg til et siste steg som kjører en Terraform kommando for å endre infrastrukturen vår.
 
+Push så til branchen din og se om det fungerer!
+
 <details>
   <summary>✨ Se fasit</summary>
 
@@ -255,6 +257,11 @@ deploy:
     - name: Run Terraform apply
       run: terraform apply -auto-approve # legger til denne linjen
 ```
+
+## 🔨 Oppgave 3.4
+
+Se på `Outputs` under **Run Terraform apply** i loggen til GitHub Actions.
+Her skal du finne en link til applikasjonen din.
 
 </details>
 
