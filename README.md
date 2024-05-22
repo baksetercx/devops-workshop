@@ -10,17 +10,21 @@ Installer Docker [herfra](https://docs.docker.com/engine/install).
 
 ## 🔨 Oppgave 1.1
 
-Prøv og bygg et Docker image slik:
+Bygg et Docker image for frontend'en slik:
 
 ```bash
 cd frontend
 docker build . -t devops-workshop:latest
 ```
 
-Du ser at den feiler, og det virker som den mangler en fil (eller filer?) for å bygge frontend'en.
-Legg til det som mangler i `COPY`-steget i filen [Dockerfile](frontend/Dockerfile).
+Når den er ferdig å bygge, kan du prøve og kjøre applikasjonen med denne kommandoen:
 
-_HINT:_ Vi bruker **yarn** for å bygge frontend'en.
+```bash
+docker run -it -p 3000:3000 devops-workshop:latest
+```
+
+Du ser at den feiler, og det virker som den mangler en fil (eller filer?) for å kunne kjøre.
+Legg til det som mangler i `COPY`-steget i filen [Dockerfile](frontend/Dockerfile).
 
 <details>
   <summary>✨ Se fasit</summary>
@@ -33,10 +37,10 @@ WORKDIR /app
 RUN apk update && \
     apk add yarn
 
-# Legg til `yarn.lock`:
-COPY package.json index.html yarn.lock ./
+# legger til `package.json`:
+COPY yarn.lock index.html package.json ./
 
-RUN yarn install
+RUN yarn install --frozen-lockfile
 
 ENTRYPOINT ["yarn", "serve"]
 ```
@@ -45,13 +49,7 @@ ENTRYPOINT ["yarn", "serve"]
 
 ## 🔨 Oppgave 1.2
 
-Prøv og kjør applikasjonen med denne kommandoen:
-
-```bash
-docker run -it -p 3000:3000 devops-workshop:latest
-```
-
-Da skal du kunne gå i nettleseren og se noe på [http://localhost:3000](http://localhost:3000)!
+Nå skal du kunne gå i nettleseren og se noe på [http://localhost:3000](http://localhost:3000)!
 
 # ▶️ 2. GitHub Actions
 

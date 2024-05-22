@@ -6,11 +6,11 @@ RUN apk update && \
     apk add yarn
 
 # Task D.1:
-# COPY package.json index.html ./
+# COPY yarn.lock index.html ./
 # Answer D.1:
-COPY package.json yarn.lock index.html ./
+COPY yarn.lock index.html package.json ./
 #
 
-RUN yarn install
+RUN yarn install --frozen-lockfile
 
 ENTRYPOINT ["yarn", "serve"]
