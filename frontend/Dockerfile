@@ -9,4 +9,5 @@ COPY yarn.lock index.html package.json./
 
 RUN yarn install --frozen-lockfile
 
+
 ENTRYPOINT ["yarn", "serve"]
