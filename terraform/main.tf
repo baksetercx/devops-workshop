@@ -22,8 +22,10 @@ resource "azurerm_container_app" "devops" {
   template {
     container {
       image  = "ghcr.io/${var.repository}/${var.my_name}:latest"
+      memory = "0.5Gi"
+      cpu    = 0.25
+      name   = "JostContainer"
     }
-
     min_replicas    = 1
     max_replicas    = 1
     revision_suffix = substr(var.revision_suffix, 0, 10)
