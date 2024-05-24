@@ -86,7 +86,7 @@ jobs:
         run: terraform plan
 
       - name: Run Terraform apply
-        run: terraform run
+        run: terraform apply
 
 
       # - name: Run Terraform apply
