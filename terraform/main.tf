@@ -11,6 +11,7 @@ resource "azurerm_container_app_environment" "devops" {
   name                = "${azurerm_resource_group.devops.name}-env"
   location            = local.location
   resource_group_name = azurerm_resource_group.devops.name
+  memory              =
 }
 
 resource "azurerm_container_app" "devops" {
@@ -21,25 +22,29 @@ resource "azurerm_container_app" "devops" {
 
   template {
     container {
-      image  = "ghcr.io/${var.repository}/${var.my_name}:latest"
-    }
-
-    min_replicas    = 1
-    max_replicas    = 1
-    revision_suffix = substr(var.revision_suffix, 0, 10)
-  }
-
-  ingress {
-    target_port      = "3000"
-    external_enabled = true
-
-    traffic_weight {
-      percentage      = 100
-      latest_revision = true
+      image = "ghcr.io/${var.repository}/${var.my_name}:latest"
+      name  = "examplecontainerapp"
+      cpu    = 0.25
+      memory = "0.5Gi"
     }
   }
+
+  min_replicas    = 1
+  max_replicas    = 1
+  revision_suffix = substr(var.revision_suffix, 0, 10)
+}
+
+ingress {
+  target_port      = "3000"
+  external_enabled = true
+
+  traffic_weight {
+    percentage      = 100
+    latest_revision = true
+  }
+}
 }
 
 output "container_app_url" {
-  value = "https://${azurerm_container_app.devops.ingress.0.fqdn}"
+value = "https://${azurerm_container_app.devops.ingress.0.fqdn}"
 }
