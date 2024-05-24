@@ -21,6 +21,9 @@ resource "azurerm_container_app" "devops" {
 
   template {
     container {
+      name = "joartest"
+      memory = "0.25Gi"
+      cpu = "0.25"
       image  = "ghcr.io/${var.repository}/${var.my_name}:latest"
     }
 
