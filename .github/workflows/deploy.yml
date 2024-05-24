@@ -16,6 +16,12 @@ jobs:
         uses: actions/checkout@v4
 
       # legg til steg her:
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+               
+      - run: yarn test
 
   build:
     name: 'Build Docker image and push to registry'
