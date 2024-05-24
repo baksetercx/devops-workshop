@@ -24,7 +24,7 @@ resource "azurerm_container_app" "devops" {
       image  = "ghcr.io/${var.repository}/${var.my_name}:latest"
       memory = "0.5Gi"
       cpu    = 0.25
-      name   = "JostContainer"
+      name   = "jost-container"
     }
     min_replicas    = 1
     max_replicas    = 1
