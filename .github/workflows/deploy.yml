@@ -16,11 +16,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: frontend dependencies
-        uses: yarn install
+        run: yarn install
 
       - name: run tests
-        uses: yarn test
-      # legg til steg her:
+        run: yarn test
 
   build:
     name: 'Build Docker image and push to registry'
