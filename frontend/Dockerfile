@@ -5,7 +5,7 @@ WORKDIR /app
 RUN apk update && \
     apk add yarn
 
-COPY yarn.lock index.html ./
+COPY yarn.lock index.html package.json ./
 
 RUN yarn install --frozen-lockfile
 
