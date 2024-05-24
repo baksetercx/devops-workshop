@@ -15,6 +15,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: frontend dependencies
+        uses: yarn install
+
+      - name: run tests
+        uses: yarn test
       # legg til steg her:
 
   build:
