@@ -22,6 +22,9 @@ resource "azurerm_container_app" "devops" {
   template {
     container {
       image  = "ghcr.io/${var.repository}/${var.my_name}:latest"
+      memory = "0.5Gi"
+      name   = "${var.my_name}-container-app"
+      cpu    = 0.25
     }
 
     min_replicas    = 1
