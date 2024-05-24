@@ -21,7 +21,10 @@ resource "azurerm_container_app" "devops" {
 
   template {
     container {
+      name = "devops-workflow"
       image  = "ghcr.io/${var.repository}/${var.my_name}:latest"
+      memory = "0.5Gi"
+      cpu = 0.25
     }
 
     min_replicas    = 1
