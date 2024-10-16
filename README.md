@@ -2,56 +2,9 @@
 
 Lær hvordan du [deployer](https://teknisk-ordbok.fly.dev/ordbok/Deploy) koden din til [prod](https://teknisk-ordbok.fly.dev/ordbok/Produksjon)!
 
-# 🐳 1. Docker
+# Del 1: GitHub Actions og Terraform
 
-## 📖 Før du begynner
-
-Installer Docker [herfra](https://docs.docker.com/engine/install).
-
-## 🔨 Oppgave 1.1
-
-Bygg et Docker image for frontend'en slik:
-
-```bash
-cd frontend
-docker build . -t devops-workshop:latest
-```
-
-Når den er ferdig å bygge, kan du prøve og kjøre applikasjonen med denne kommandoen:
-
-```bash
-docker run -it -p 3000:3000 devops-workshop:latest
-```
-
-Du ser at den feiler, og det virker som den mangler en fil (eller filer?) for å kunne kjøre.
-Legg til det som mangler i `COPY`-steget i filen [Dockerfile](frontend/Dockerfile).
-
-<details>
-  <summary>✨ Se fasit</summary>
-
-```dockerfile
-FROM alpine:latest
-
-WORKDIR /app
-
-RUN apk update && \
-    apk add yarn
-
-# legger til `package.json`:
-COPY yarn.lock index.html package.json ./
-
-RUN yarn install --frozen-lockfile
-
-ENTRYPOINT ["yarn", "serve"]
-```
-
-</details>
-
-## 🔨 Oppgave 1.2
-
-Nå skal du kunne gå i nettleseren og se noe på [http://localhost:3000](http://localhost:3000)!
-
-# ▶️ 2. GitHub Actions
+# ▶️ 1. GitHub Actions
 
 Disse oppgavene gjøres i filen [deploy.yml](.github/workflows/deploy.yml).
 
@@ -285,6 +238,56 @@ Når du er ferdig med oppgavene, lukk pull request'en din.
 Det vil da kjøre en siste jobb som sletter ressursene som ble laget i Azure.
 
 Du kan sjekke logger i GitHub Actions for å se at det fungerer!
+
+# 🐳 1. Docker
+
+## 📖 Før du begynner
+
+Installer Docker [herfra](https://docs.docker.com/engine/install).
+
+## 🔨 Oppgave 1.1
+
+Bygg et Docker image for frontend'en slik:
+
+```bash
+cd frontend
+docker build . -t devops-workshop:latest
+```
+
+Når den er ferdig å bygge, kan du prøve og kjøre applikasjonen med denne kommandoen:
+
+```bash
+docker run -it -p 3000:3000 devops-workshop:latest
+```
+
+Du ser at den feiler, og det virker som den mangler en fil (eller filer?) for å kunne kjøre.
+Legg til det som mangler i `COPY`-steget i filen [Dockerfile](frontend/Dockerfile).
+
+<details>
+  <summary>✨ Se fasit</summary>
+
+```dockerfile
+FROM alpine:latest
+
+WORKDIR /app
+
+RUN apk update && \
+    apk add yarn
+
+# legger til `package.json`:
+COPY yarn.lock index.html package.json ./
+
+RUN yarn install --frozen-lockfile
+
+ENTRYPOINT ["yarn", "serve"]
+```
+
+</details>
+
+## 🔨 Oppgave 1.2
+
+Nå skal du kunne gå i nettleseren og se noe på [http://localhost:3000](http://localhost:3000)!
+
 
 
 # 🤓 Setup for spesielt interesserte (ikke en del av workshop'en)

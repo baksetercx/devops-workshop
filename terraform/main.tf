@@ -7,39 +7,12 @@ resource "azurerm_resource_group" "devops" {
   location = local.location
 }
 
-resource "azurerm_container_app_environment" "devops" {
-  name                = "${azurerm_resource_group.devops.name}-env"
-  location            = local.location
+resource "azurerm_static_web_app" "devops" {
+  name                = "${var.my_name}-webapp"
   resource_group_name = azurerm_resource_group.devops.name
+  location            = local.location
 }
 
-resource "azurerm_container_app" "devops" {
-  name                         = "${var.my_name}-app"
-  container_app_environment_id = azurerm_container_app_environment.devops.id
-  resource_group_name          = azurerm_resource_group.devops.name
-  revision_mode                = "Single"
-
-  template {
-    container {
-      image  = "ghcr.io/${var.repository}/${var.my_name}:latest"
-    }
-
-    min_replicas    = 1
-    max_replicas    = 1
-    revision_suffix = substr(var.revision_suffix, 0, 10)
-  }
-
-  ingress {
-    target_port      = "3000"
-    external_enabled = true
-
-    traffic_weight {
-      percentage      = 100
-      latest_revision = true
-    }
-  }
-}
-
-output "container_app_url" {
-  value = "https://${azurerm_container_app.devops.ingress.0.fqdn}"
+output "swa_api_key" {
+  value = azurerm_static_web_app.devops.api_key
 }
