@@ -78,7 +78,7 @@ jobs:
       - name: Unlock Terraform state on failure
         if: failure() || cancelled()
         run: |
-          lock_id=$(terraform plan -no-color 2> >(grep -i 'ID:' | sed -e 's/ID:\s* //g'))
+          lock_id=$(terraform plan -no-color 2> >(grep -i 'ID:' | sed -e 's/ID:\s*//g' | tr -d ' '))
           terraform force-unlock -force "$lock_id"
 
   deploy-frontend:
