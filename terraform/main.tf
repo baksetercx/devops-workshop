@@ -1,5 +1,5 @@
 locals {
-  location = "norwayeast"
+  location = "westeurope"
 }
 
 resource "azurerm_resource_group" "devops" {
