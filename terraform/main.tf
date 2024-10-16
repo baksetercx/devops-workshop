@@ -14,5 +14,6 @@ resource "azurerm_static_web_app" "devops" {
 }
 
 output "swa_api_key" {
-  value = azurerm_static_web_app.devops.api_key
+  value     = azurerm_static_web_app.devops.api_key
+  sensitive = true
 }
