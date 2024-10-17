@@ -3,9 +3,6 @@ name: Deploy
 on:
   pull_request:
     branches: [master]
-  #TODO: remove
-  push:
-    branches: [fasit]
 
 jobs:
   frontend-tests:
