@@ -30,7 +30,7 @@ git push # senere
 Da vil du se at GitHub Actions vil kjøre jobbene dine, og du kan se output.
 Hver gang du vil teste endringer, push branchen din til GitHub.
 
-💡 _TIPS:_ istedenfor å lage flere commits, kan du bruke `git add .` og `git commit --amend` for å legge til nye endringer i forrige commit,
+💡 _TIPS:_ istedenfor å lage flere commits, kan du bruke `git add .` og `git commit --amend --no-edit` for å legge til nye endringer i forrige commit,
 for å så pushe med `git push --force`. Dette er en god praksis for å holde git-historikken ren når du til slutt merger til `master`.
 
 ## 🔨 Oppgave 1.1
