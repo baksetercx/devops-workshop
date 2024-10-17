@@ -85,7 +85,7 @@ deploy-frontend:
   name: Deploy frontend
   runs-on: ubuntu-latest
   needs:
-  - run-tests # legger til denne linja
+  - frontend-tests # legger til denne linja
   - apply-terraform
   permissions:
     contents: read

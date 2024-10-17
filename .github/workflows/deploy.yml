@@ -87,7 +87,7 @@ jobs:
       # Task 1.2:
       #
       # Answer 1.2:
-      - run-tests
+      - frontend-tests
       - apply-terraform
     #
     permissions:
