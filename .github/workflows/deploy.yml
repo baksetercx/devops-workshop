@@ -3,12 +3,12 @@ name: Deploy
 on:
   pull_request:
     branches: [master]
-#TODO: remove
+  #TODO: remove
   push:
     branches: [fasit]
 
 jobs:
-  run-tests:
+  frontend-tests:
     name: Run frontend tests
     runs-on: ubuntu-latest
     defaults:
@@ -18,15 +18,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # legg til steg her:
+      # Task 1.1:
+      #
+      # Answer 1.1:
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run tests
+        run: yarn test
+      #
 
   apply-terraform:
     name: Apply Terraform changes
     runs-on: ubuntu-latest
     env:
-# TODO: uncomment
-#     TF_VAR_my_name: ${{ github.head_ref }}
-      TF_VAR_my_name: 'andreas'
+      TF_VAR_my_name: ${{ github.head_ref }}
       ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
       ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
@@ -57,13 +63,11 @@ jobs:
       - name: Run Terraform plan
         run: terraform plan
 
-      # Task 3.3
+      # Task 3.3:
       #
-      # # - name: Run Terraform apply
-      # Answer 3.3
+      # Answer 3.3:
       - name: Run Terraform apply
         run: terraform apply -auto-approve
-      #
       #
 
       - name: Get Terraform output
@@ -83,8 +87,12 @@ jobs:
     name: Deploy frontend
     runs-on: ubuntu-latest
     needs:
+      # Task 1.2:
+      #
+      # Answer 1.2:
       - run-tests
       - apply-terraform
+    #
     permissions:
       contents: read
       id-token: write
