@@ -188,8 +188,10 @@ apply-terraform:
 
 ## 🔨 Oppgave 2.4
 
-Se på `Outputs` under **Run Terraform apply** i loggen til GitHub Actions.
-Her skal du finne en link til applikasjonen din.
+Dersom alt har gått bra, skal du få en URL til applikasjonen din publisert som en kommentar på pull request'en din.
+Gå inn på linken og se om du får opp frontend'en din!
+
+Prøv deretter å endre på [index.html](frontend/index.html) og pushe til branchen din, for å se at ny endringer blir deployet riktig.
 
 ## 🏁 Ferdig!
 
