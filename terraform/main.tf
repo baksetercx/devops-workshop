@@ -13,7 +13,10 @@ resource "azurerm_static_web_app" "devops" {
   location            = local.location
 }
 
-output "swa_api_key" {
-  value     = azurerm_static_web_app.devops.api_key
-  sensitive = true
+output "resource_group_name" {
+  value = azurerm_resource_group.devops.name
+}
+
+output "swa_name" {
+  value = azurerm_static_web_app.devops.name
 }
