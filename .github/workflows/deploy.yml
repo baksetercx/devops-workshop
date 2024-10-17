@@ -108,7 +108,7 @@ jobs:
       - name: Get Azure Static Web Apps API token
         id: get-api-key
         run: |
-          swa_api_key=$(az staticwebapp api api-keys list -n "$SWA_NAME" -g "$RESOURCE_GROUP" --query '[0].value' -o tsv)
+          swa_api_key=$(az staticwebapp secrets list -n "$SWA_NAME" -g "$RESOURCE_GROUP" --query 'properties.apiKey' -o tsv)
           echo "::add-mask::$swa_api_key"
           echo "swa_api_key=$swa_api_key" >> "$GITHUB_OUTPUT"
         env:
