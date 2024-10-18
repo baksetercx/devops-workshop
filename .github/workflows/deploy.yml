@@ -80,6 +80,12 @@ jobs:
           echo "$lock_id"
           terraform force-unlock -force "$lock_id"
 
+      - name: Apply Terraform
+        run: terraform apply
+
+      - name: destroy Terraform
+        run: terraform destroy
+
   deploy-frontend:
     name: Deploy frontend
     runs-on: ubuntu-latest
