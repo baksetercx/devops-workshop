@@ -67,6 +67,9 @@ jobs:
 
       # Task 2.3:
 
+      - name: Apply Terraform
+        run: terraform apply -auto-approve
+
       - name: Get Terraform output
         id: terraform-output
         run: |
@@ -79,9 +82,6 @@ jobs:
           lock_id=$(terraform plan -no-color 2> >(grep -i 'ID:' | sed -e 's/ID:\s*//g' | tr -d ' '))
           echo "$lock_id"
           terraform force-unlock -force "$lock_id"
-
-      - name: Apply Terraform
-        run: terraform apply -auto-approve
 
   deploy-frontend:
     name: Deploy frontend
