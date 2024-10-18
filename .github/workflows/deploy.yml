@@ -14,8 +14,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Say hello
-        uses: .
+      - name: Install dependencies
+        run: |
+            npm i yarn
+
       # Task 1.1:
 
   deploy-infrastructure:
