@@ -2,13 +2,13 @@
 
 Lær hvordan du [deployer](https://teknisk-ordbok.fly.dev/ordbok/Deploy) koden din til [prod](https://teknisk-ordbok.fly.dev/ordbok/Produksjon)!
 
-# Del 1: GitHub Actions og Terraform
+# Del 1: ▶️ GitHub Actions og 🏗️ Terraform
 
-# ▶️ 1. GitHub Actions
+## ▶️ 1. GitHub Actions
 
 Disse oppgavene gjøres i filen [deploy.yml](.github/workflows/deploy.yml).
 
-## 📖 Før du begynner
+### 📖 Før du begynner
 
 Sjekk ut en git branch med navnet ditt, f.eks.:
 
@@ -33,7 +33,7 @@ Hver gang du vil teste endringer, push branchen din til GitHub.
 💡 _TIPS:_ istedenfor å lage flere commits, kan du bruke `git add .` og `git commit --amend --no-edit` for å legge til nye endringer i forrige commit,
 for å så pushe med `git push --force`. Dette er en god praksis for å holde git-historikken ren når du til slutt merger til `master`.
 
-## 🔨 Oppgave 1.1
+### 🔨 Oppgave 1.1
 
 Vi vil gjerne kjøre testene våre for frontend'en i GitHub Actions, men vi mangler noen steg i jobben `frontend-tests`.
 Fyll ut stegene som mangler for å kjøre testenen til frontend'en.
@@ -65,7 +65,7 @@ frontend-tests:
 
 </details>
 
-## 🔨 Oppgave 1.2
+### 🔨 Oppgave 1.2
 
 Se på **Summary** på din action i GitHub UI'en.
 Den finner du ved å enten trykke på **Show all checks** og så **Details** på en pull request,
@@ -74,6 +74,8 @@ eller gå [hit](https://github.com/baksetercx/devops-workshop/actions) og finn d
 Du vil da se at det ikke er noen kobling mellom stegene som kjører testene og steget som deployer frontend'en.
 Vi vil at deploy-steget ikke skal starte før testene har kjørt og passerer.
 Endre det slik at deploy-steget avhenger av test-steget for å kunne kjøre.
+
+*NB! Deploy-steget vil kræsje siden vi ikke har laget infrastrukturen vår enda. Dette kan du ignorere, vi fikser det i neste oppgave.*
 
 Dobbeltsjekk til slutt at deploy-steget kjører etter test-steget ved å se på **Summary** i GitHub Actions UI'en.
 
@@ -91,24 +93,26 @@ deploy-frontend:
     contents: read
     id-token: write
   environment: prod
+
+  ...
 ```
 
 </details>
 
-# 🏗️ 2. Terraform
+## 🏗️ 2. Terraform
 
-## 📖 Før du begynner
+### 📖 Før du begynner
 
 I denne workshoppen har dere ikke mulighet til å kjøre Terraform lokalt,
 men du kan pushe til branch'en din og se på output fra GitHub Actions.
 
-## 🔨 Oppgave 2.1
+### 🔨 Oppgave 2.1
 
 Se på output fra GitHub Actions i steget `deploy`.
 Her kan du se at Terraform feiler fordi det mangler noen attributter i en ressurs.
 Vanligvis ville du sett hva Terraform har tenkt til å gjøre (en `plan`).
 
-## 🔨 Oppgave 2.2
+### 🔨 Oppgave 2.2
 
 Det mangler noen attributtene i `azurerm_static_web_app`-ressursen i filen [main.tf](terraform/main.tf).
 Legg til de feltene som mangler for å kunne deploye applikasjonen.
@@ -131,7 +135,7 @@ resource "azurerm_static_web_app" "devops" {
 
 </details>
 
-## 🔨 Oppgave 2.3
+### 🔨 Oppgave 2.3
 
 Vi har nå lyst til å lage infrastrukturen vår med Terraform.
 Legg til et siste steg i `apply-terraform`-jobben som kjører en Terraform kommando for å lage infrastrukturen vår.
@@ -186,7 +190,7 @@ apply-terraform:
 
 </details>
 
-## 🔨 Oppgave 2.4
+### 🔨 Oppgave 2.4
 
 Dersom alt har gått bra, skal du få en URL til applikasjonen din publisert som en kommentar på pull request'en din.
 Gå inn på linken og se om du får opp frontend'en din!
