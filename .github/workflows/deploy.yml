@@ -60,6 +60,8 @@ jobs:
         run: terraform plan
 
       # Task 2.3:
+      - name: Run Terraform apply
+        run: terraform apply
 
       - name: Get Terraform output
         id: terraform-output
