@@ -9,6 +9,7 @@ resource "azurerm_resource_group" "devops" {
 
 resource "azurerm_static_web_app" "devops" {
   name                = "${var.my_name}-webapp"
+  location = local.location
   # Task 2.2:
 }
 
