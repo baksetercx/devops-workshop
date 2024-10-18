@@ -84,7 +84,7 @@ deploy-frontend:
   runs-on: ubuntu-latest
   needs:
   - frontend-tests # legger til denne linja
-  - apply-terraform
+  - deploy-infrastructure
   permissions:
     contents: read
     id-token: write
@@ -134,7 +134,7 @@ resource "azurerm_static_web_app" "devops" {
 ### 🔨 Oppgave 2.3
 
 Vi har nå lyst til å lage infrastrukturen vår med Terraform.
-Legg til et siste steg i `apply-terraform`-jobben som kjører en Terraform kommando for å lage infrastrukturen vår.
+Legg til et siste steg i `deploy-infrastructure`-jobben som kjører en Terraform kommando for å lage infrastrukturen vår.
 
 Push så til branchen din og se om det fungerer!
 
@@ -145,8 +145,8 @@ eller kjør `terraform -help` i terminalen dersom du har Terraform installert lo
   <summary>✨ Se fasit</summary>
 
 ```yaml
-apply-terraform:
-  name: Apply Terraform changes
+deploy-infrastructure:
+  name: Deploy infrastructure with Terraform
   runs-on: ubuntu-latest
   env:
     TF_VAR_my_name: ${{ github.head_ref }}

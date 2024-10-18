@@ -25,8 +25,8 @@ jobs:
         run: yarn test
       #
 
-  apply-terraform:
-    name: Apply Terraform changes
+  deploy-infrastructure:
+    name: Deploy infrastructure with Terraform
     runs-on: ubuntu-latest
     env:
       TF_VAR_my_name: ${{ github.head_ref }}
@@ -88,7 +88,7 @@ jobs:
       #
       # Answer 1.2:
       - frontend-tests
-      - apply-terraform
+      - deploy-infrastructure
     #
     permissions:
       contents: read
@@ -118,8 +118,8 @@ jobs:
           echo "::add-mask::$swa_api_key"
           echo "swa_api_key=$swa_api_key" >> "$GITHUB_OUTPUT"
         env:
-          RESOURCE_GROUP: ${{ needs.apply-terraform.outputs.resource-group-name }}
-          SWA_NAME: ${{ needs.apply-terraform.outputs.swa-name }}
+          RESOURCE_GROUP: ${{ needs.deploy-infrastructure.outputs.resource-group-name }}
+          SWA_NAME: ${{ needs.deploy-infrastructure.outputs.swa-name }}
 
       - name: Build and deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
