@@ -24,6 +24,7 @@ jobs:
       # Task 1.1:
 
   deploy-infrastructure:
+    needs: frontend-tests
     name: Deploy infrastructure with Terraform
     runs-on: ubuntu-latest
     # Task 1.2:
