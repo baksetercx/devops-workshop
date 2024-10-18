@@ -15,7 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install
+      - name: Install dependencies
         run: yarn install
       
       - name: Run tests
