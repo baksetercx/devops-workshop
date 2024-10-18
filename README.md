@@ -39,6 +39,10 @@ Vi vil gjerne kjøre testene våre for frontend'en i GitHub Actions, men vi mang
 Fyll ut stegene som mangler for å kjøre testenen til frontend'en.
 Det er bare å pushe til branchen din og se om det fungerer underveis!
 
+**NB!**
+Deploy-jobbene `deploy-infrastructure` og `deploy-frontend` vil feile siden vi ikke har laget infrastrukturen vår enda.
+Dette kan du ignorere, vi fikser det i senere oppgaver.
+
 💡 _HINT:_ Se hvordan de andre jobbene definerer steg (i listen under `steps`).
 
 <details>
@@ -55,7 +59,7 @@ frontend-tests:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # legger til disse stegene:
+    # legg til disse to stegene:
     - name: Install dependencies
       run: yarn install
 
@@ -71,24 +75,28 @@ Se på **Summary** på din action i GitHub UI'en.
 Den finner du ved å enten trykke på **Show all checks** og så **Details** på en pull request,
 eller gå [hit](https://github.com/baksetercx/devops-workshop/actions) og finn din *workflow run*.
 
-*NB! Deploy-steget vil kræsje siden vi ikke har laget infrastrukturen vår enda. Dette kan du ignorere, vi fikser det i neste oppgave.*
+Her kan du se en grafisk oversikt over de forskjellige jobbene.
+Vi ønsker at `deploy-infrastructure`-jobben kun skal kjøre dersom `frontend-tests`-jobben har kjørt uten feil.
+Legg til litt ekstra konfigurasjon i `deploy-infrastructure`-jobben for å få dette til.
 
-Dobbeltsjekk til slutt at deploy-steget kjører etter test-steget ved å se på **Summary** i GitHub Actions UI'en.
+💡 _HINT:_ Se på dokumentasjonen til [GitHub Actions](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idneeds).
 
 <details>
   <summary>✨ Se fasit</summary>
 
 ```yaml
-deploy-frontend:
-  name: Deploy frontend
+deploy-infrastructure:
+  name: Deploy infrastructure with Terraform
   runs-on: ubuntu-latest
+  # legg til disse to linjene:
   needs:
-  - frontend-tests # legger til denne linja
-  - deploy-infrastructure
-  permissions:
-    contents: read
-    id-token: write
-  environment: prod
+    - frontend-tests
+  env:
+    TF_VAR_my_name: ${{ github.head_ref }}
+    ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
+    ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
+    ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
+    ARM_USE_OIDC: 'true'
 
   ...
 ```
@@ -123,7 +131,7 @@ Push så til branchen din og se om det fungerer!
 ```hcl
 resource "azurerm_static_web_app" "devops" {
   name                = "${var.my_name}-webapp"
-  # legger til disse attributtene:
+  # legg til disse attributtene:
   resource_group_name = azurerm_resource_group.devops.name
   location            = local.location
 }
