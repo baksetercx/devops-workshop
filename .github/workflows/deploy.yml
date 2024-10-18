@@ -21,17 +21,11 @@ jobs:
         with:
           node-version: "20.x"
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+      - name: Install dependencies
+        run: npm install
 
-      - name: Init Terraform
-        run: terraform init
-
-      - name: Set Terraform workspace
-        run: terraform workspace new "$TF_VAR_my_name" || terraform workspace select "$TF_VAR_my_name"
-
-      - name: Run Terraform plan
-        run: terraform plan
+      - name: Run tests
+        run: npm test
 
   deploy-infrastructure:
     name: Deploy infrastructure with Terraform
