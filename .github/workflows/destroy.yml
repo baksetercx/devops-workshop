@@ -14,14 +14,14 @@ jobs:
       ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
       ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
-      ARM_USE_OIDC: 'true'
+      ARM_USE_OIDC: "true"
     permissions:
       contents: read
       id-token: write
     environment: prod
     defaults:
       run:
-        working-directory: 'terraform'
+        working-directory: "terraform"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
