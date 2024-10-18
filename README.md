@@ -188,8 +188,9 @@ deploy-infrastructure:
     - name: Run Terraform plan
       run: terraform plan
 
+    # legger til dette steget:
     - name: Run Terraform apply
-      run: terraform apply -auto-approve # legg til denne linjen
+      run: terraform apply -auto-approve
 ```
 
 </details>

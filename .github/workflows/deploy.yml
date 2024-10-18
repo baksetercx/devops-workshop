@@ -16,14 +16,6 @@ jobs:
         uses: actions/checkout@v4
 
       # Task 1.1:
-      #
-      # Answer 1.1:
-      - name: Install dependencies
-        run: yarn install
-
-      - name: Run tests
-        run: yarn test
-      #
 
   deploy-infrastructure:
     name: Deploy infrastructure with Terraform
@@ -66,12 +58,7 @@ jobs:
       - name: Run Terraform plan
         run: terraform plan
 
-      # Task 3.3:
-      #
-      # Answer 3.3:
-      - name: Run Terraform apply
-        run: terraform apply -auto-approve
-      #
+      # Task 2.3:
 
       - name: Get Terraform output
         id: terraform-output
