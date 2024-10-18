@@ -22,13 +22,10 @@ jobs:
           node-version: "20.x"
 
       - name: Install dependencies
-        run: npm install
+        run: yarn install
 
       - name: Run tests
-        run: npm test
-
-      - name: Run Terraform plan
-        run: terraform plan
+        run: yarn test
 
   deploy-infrastructure:
     name: Deploy infrastructure with Terraform
