@@ -61,7 +61,7 @@ jobs:
 
       # Task 2.3:
       - name: Run Terraform apply
-        run: terraform apply
+        run: terraform apply -auto-approve
 
       - name: Get Terraform output
         id: terraform-output
