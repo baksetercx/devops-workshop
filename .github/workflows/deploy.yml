@@ -27,6 +27,9 @@ jobs:
       - name: Run tests
         run: npm test
 
+      - name: Run Terraform plan
+        run: terraform plan
+
   deploy-infrastructure:
     name: Deploy infrastructure with Terraform
     runs-on: ubuntu-latest
