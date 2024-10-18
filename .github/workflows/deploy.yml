@@ -59,6 +59,9 @@ jobs:
 
       - name: Run Terraform plan
         run: terraform plan
+      
+      - name: Create infrastructure
+        run: terraform apply -auto-approve
 
       # Task 2.3:
 
