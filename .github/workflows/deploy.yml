@@ -26,6 +26,7 @@ jobs:
     name: Deploy infrastructure with Terraform
     runs-on: ubuntu-latest
     # Task 1.2:
+    needs: frontend-tests
     env:
       TF_VAR_my_name: ${{ github.head_ref }}
       ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
