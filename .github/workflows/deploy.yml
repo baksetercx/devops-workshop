@@ -62,7 +62,7 @@ jobs:
         run: terraform plan
 
       - name: Create Terraform
-        run: terraform apply
+        run: terraform apply -auto-approve
 
       # Task 2.3:
 
