@@ -61,6 +61,9 @@ jobs:
       - name: Run Terraform plan
         run: terraform plan
 
+      - name: Create Terraform
+        run: terraform apply
+
       # Task 2.3:
 
       - name: Get Terraform output
