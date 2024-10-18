@@ -81,10 +81,7 @@ jobs:
           terraform force-unlock -force "$lock_id"
 
       - name: Apply Terraform
-        run: terraform apply
-
-      - name: destroy Terraform
-        run: terraform destroy
+        run: terraform apply -auto-approve
 
   deploy-frontend:
     name: Deploy frontend
