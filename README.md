@@ -2,56 +2,9 @@
 
 Lær hvordan du [deployer](https://teknisk-ordbok.fly.dev/ordbok/Deploy) koden din til [prod](https://teknisk-ordbok.fly.dev/ordbok/Produksjon)!
 
-# 🐳 1. Docker
+# Del 1: GitHub Actions og Terraform
 
-## 📖 Før du begynner
-
-Installer Docker [herfra](https://docs.docker.com/engine/install).
-
-## 🔨 Oppgave 1.1
-
-Bygg et Docker image for frontend'en slik:
-
-```bash
-cd frontend
-docker build . -t devops-workshop:latest
-```
-
-Når den er ferdig å bygge, kan du prøve og kjøre applikasjonen med denne kommandoen:
-
-```bash
-docker run -it -p 3000:3000 devops-workshop:latest
-```
-
-Du ser at den feiler, og det virker som den mangler en fil (eller filer?) for å kunne kjøre.
-Legg til det som mangler i `COPY`-steget i filen [Dockerfile](frontend/Dockerfile).
-
-<details>
-  <summary>✨ Se fasit</summary>
-
-```dockerfile
-FROM alpine:latest
-
-WORKDIR /app
-
-RUN apk update && \
-    apk add yarn
-
-# legger til `package.json`:
-COPY yarn.lock index.html package.json ./
-
-RUN yarn install --frozen-lockfile
-
-ENTRYPOINT ["yarn", "serve"]
-```
-
-</details>
-
-## 🔨 Oppgave 1.2
-
-Nå skal du kunne gå i nettleseren og se noe på [http://localhost:3000](http://localhost:3000)!
-
-# ▶️ 2. GitHub Actions
+# ▶️ 1. GitHub Actions
 
 Disse oppgavene gjøres i filen [deploy.yml](.github/workflows/deploy.yml).
 
@@ -77,12 +30,12 @@ git push # senere
 Da vil du se at GitHub Actions vil kjøre jobbene dine, og du kan se output.
 Hver gang du vil teste endringer, push branchen din til GitHub.
 
-💡 _TIPS:_ istedenfor å lage flere commits, kan du bruke `git add .` og `git commit --amend` for å legge til nye endringer i forrige commit,
+💡 _TIPS:_ istedenfor å lage flere commits, kan du bruke `git add .` og `git commit --amend --no-edit` for å legge til nye endringer i forrige commit,
 for å så pushe med `git push --force`. Dette er en god praksis for å holde git-historikken ren når du til slutt merger til `master`.
 
-## 🔨 Oppgave 2.1
+## 🔨 Oppgave 1.1
 
-Vi vil gjerne kjøre testene våre for frontend'en i GitHub Actions, men vi mangler noen steg i jobben `run-tests`.
+Vi vil gjerne kjøre testene våre for frontend'en i GitHub Actions, men vi mangler noen steg i jobben `frontend-tests`.
 Fyll ut stegene som mangler for å kjøre testenen til frontend'en.
 Det er bare å pushe til branchen din og se om det fungerer underveis!
 
@@ -92,12 +45,12 @@ Det er bare å pushe til branchen din og se om det fungerer underveis!
   <summary>✨ Se fasit</summary>
 
 ```yaml
-run_tests:
+frontend-tests:
   name: 'Run frontend tests'
   runs-on: ubuntu-latest
   defaults:
     run:
-      working-directory: './frontend'
+      working-directory: 'frontend'
   steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -112,117 +65,76 @@ run_tests:
 
 </details>
 
-## 🔨 Oppgave 2.2
+## 🔨 Oppgave 1.2
 
 Se på **Summary** på din action i GitHub UI'en.
 Den finner du ved å enten trykke på **Show all checks** og så **Details** på en pull request,
-eller gå [hit](https://github.com/baksetercx/devops-workshop/actions) og finn din workflow run.
+eller gå [hit](https://github.com/baksetercx/devops-workshop/actions) og finn din *workflow run*.
 
-Du vil da se at det ikke er noen kobling mellom stegene som kjører testene og stegene som bygger Docker image.
-Vi vil at bygg-steget ikke skal starte før testene har kjørt og har passert.
-Endre det slik at bygg-steget avhenger av test-steget for å kunne kjøre.
+Du vil da se at det ikke er noen kobling mellom stegene som kjører testene og steget som deployer frontend'en.
+Vi vil at deploy-steget ikke skal starte før testene har kjørt og passerer.
+Endre det slik at deploy-steget avhenger av test-steget for å kunne kjøre.
 
-Dobbeltsjekk til slutt at bygg-steget kjører etter test-steget ved å se på **Summary** i GitHub Actions UI'en.
+Dobbeltsjekk til slutt at deploy-steget kjører etter test-steget ved å se på **Summary** i GitHub Actions UI'en.
 
 <details>
   <summary>✨ Se fasit</summary>
 
 ```yaml
-build:
-  name: 'Build Docker image and push to registry'
-  needs: [run-tests] # legger til denne linjen
+deploy-frontend:
+  name: Deploy frontend
   runs-on: ubuntu-latest
+  needs:
+  - frontend-tests # legger til denne linja
+  - apply-terraform
   permissions:
     contents: read
-    packages: write
-  steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: Login to GitHub Container Registry
-      uses: docker/login-action@v3
-      with:
-        registry: 'ghcr.io'
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-
-    - name: Build and push image to registry
-      uses: docker/build-push-action@v5
-      with:
-        push: 'true'
-        tags: 'ghcr.io/${{ github.repository }}/${{ github.head_ref }}:latest'
-        context: 'frontend'
+    id-token: write
+  environment: prod
 ```
 
 </details>
 
-# 🏗️ 3. Terraform
+# 🏗️ 2. Terraform
 
 ## 📖 Før du begynner
 
 I denne workshoppen har dere ikke mulighet til å kjøre Terraform lokalt,
 men du kan pushe til branch'en din og se på output fra GitHub Actions.
 
-## 🔨 Oppgave 3.1
+## 🔨 Oppgave 2.1
 
-Se på output fra GitHub Actions i steget `deploy`. Her kan du se at Terraform feiler fordi det mangler noen attributter i en ressurs.
+Se på output fra GitHub Actions i steget `deploy`.
+Her kan du se at Terraform feiler fordi det mangler noen attributter i en ressurs.
 Vanligvis ville du sett hva Terraform har tenkt til å gjøre (en `plan`).
 
-## 🔨 Oppgave 3.2
+## 🔨 Oppgave 2.2
 
-Det mangler noen felter i `azurerm_container_app`-ressursen i filen [main.tf](terraform/main.tf).
+Det mangler noen attributtene i `azurerm_static_web_app`-ressursen i filen [main.tf](terraform/main.tf).
 Legg til de feltene som mangler for å kunne deploye applikasjonen.
 
 Push så til branchen din og se om det fungerer!
 
-💡 _HINT:_ Les [dokumentasjonen](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/container_app) til `azurerm_container_app`.
+💡 _HINT:_ Les [dokumentasjonen](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/static_web_app) til `azurerm_static_web_app`.
 
 <details>
   <summary>✨ Se fasit</summary>
 
 ```hcl
-resource "azurerm_container_app" "devops" {
-  name                         = "${var.my_name}-app"
-  container_app_environment_id = azurerm_container_app_environment.backend_env.id
-  resource_group_name          = azurerm_resource_group.devops
-  revision_mode                = "Single"
-
-  template {
-    container {
-      image  = "ghcr.io/computas/devops-workshop/${var.my_name}:latest"
-      # legger til disse feltene:
-      name   = "devops-workshop"
-      cpu    = "0.25"
-      memory = "0.5Gi"
-      #
-    }
-
-    min_replicas    = 1
-    max_replicas    = 1
-    revision_suffix = substr(var.revision_suffix, 0, 10)
-  }
-
-  ingress {
-    target_port      = "3000"
-    external_enabled = true
-
-    traffic_weight {
-      percentage      = 100
-      latest_revision = true
-    }
-  }
+resource "azurerm_static_web_app" "devops" {
+  name                = "${var.my_name}-webapp"
+  # legger til disse attributtene:
+  resource_group_name = azurerm_resource_group.devops.name
+  location            = local.location
 }
 ```
 
 </details>
 
-## 🔨 Oppgave 3.3
+## 🔨 Oppgave 2.3
 
-Vi har lyst til å deploye med Terraform.
-Legg til et siste steg i `deploy`-jobben som kjører en Terraform kommando for å lage infrastrukturen vår.
+Vi har nå lyst til å lage infrastrukturen vår med Terraform.
+Legg til et siste steg i `apply-terraform`-jobben som kjører en Terraform kommando for å lage infrastrukturen vår.
 
 Push så til branchen din og se om det fungerer!
 
@@ -233,18 +145,18 @@ eller kjør `terraform -help` i terminalen dersom du har Terraform installert lo
   <summary>✨ Se fasit</summary>
 
 ```yaml
-deploy:
-  name: 'Deploy using Terraform'
+apply-terraform:
+  name: Apply Terraform changes
   runs-on: ubuntu-latest
-  needs: [build]
   env:
-    TF_VAR_revision_suffix: ${{ github.sha }}
     TF_VAR_my_name: ${{ github.head_ref }}
-    TF_VAR_repository: ${{ github.repository }}
     ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
     ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
     ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
     ARM_USE_OIDC: 'true'
+  outputs:
+    resource-group-name: ${{ steps.terraform-output.outputs.resource_group_name }}
+    swa-name: ${{ steps.terraform-output.outputs.swa_name }}
   permissions:
     contents: read
     id-token: write
@@ -263,21 +175,23 @@ deploy:
       run: terraform init
 
     - name: Set Terraform workspace
-      run: terraform workspace new $TF_VAR_my_name || terraform workspace select $TF_VAR_my_name
+      run: terraform workspace new "$TF_VAR_my_name" || terraform workspace select "$TF_VAR_my_name"
 
     - name: Run Terraform plan
       run: terraform plan
 
     - name: Run Terraform apply
-      run: terraform apply -auto-approve # legger til denne linjen
+      run: terraform apply -auto-approve # legg til denne linjen
 ```
 
 </details>
 
-## 🔨 Oppgave 3.4
+## 🔨 Oppgave 2.4
 
-Se på `Outputs` under **Run Terraform apply** i loggen til GitHub Actions.
-Her skal du finne en link til applikasjonen din.
+Dersom alt har gått bra, skal du få en URL til applikasjonen din publisert som en kommentar på pull request'en din.
+Gå inn på linken og se om du får opp frontend'en din!
+
+Prøv deretter å endre på [index.html](frontend/index.html) og pushe til branchen din, for å se at ny endringer blir deployet riktig.
 
 ## 🏁 Ferdig!
 
@@ -286,6 +200,7 @@ Det vil da kjøre en siste jobb som sletter ressursene som ble laget i Azure.
 
 Du kan sjekke logger i GitHub Actions for å se at det fungerer!
 
+# Del 2: Coming soon ...
 
 # 🤓 Setup for spesielt interesserte (ikke en del av workshop'en)
 

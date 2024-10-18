@@ -1,9 +1,12 @@
 {
   "name": "devops-workshop",
   "scripts": {
-    "test": "echo \"Running tests...\" && sleep 2 && echo \"All tests passing!\""
+    "test": "echo \"Running tests...\" && sleep 2 && echo \"All tests passing!\"",
+    "dev": "serve .",
+    "build": "mkdir -p dist && cp index.html dist/index.html",
+    "start": "serve dist"
   },
   "dependencies": {
-    "serve": "14.2.3"
+    "serve": "^14.2.4"
   }
 }
