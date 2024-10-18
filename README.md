@@ -71,10 +71,6 @@ Se på **Summary** på din action i GitHub UI'en.
 Den finner du ved å enten trykke på **Show all checks** og så **Details** på en pull request,
 eller gå [hit](https://github.com/baksetercx/devops-workshop/actions) og finn din *workflow run*.
 
-Du vil da se at det ikke er noen kobling mellom stegene som kjører testene og steget som deployer frontend'en.
-Vi vil at deploy-steget ikke skal starte før testene har kjørt og passerer.
-Endre det slik at deploy-steget avhenger av test-steget for å kunne kjøre.
-
 *NB! Deploy-steget vil kræsje siden vi ikke har laget infrastrukturen vår enda. Dette kan du ignorere, vi fikser det i neste oppgave.*
 
 Dobbeltsjekk til slutt at deploy-steget kjører etter test-steget ved å se på **Summary** i GitHub Actions UI'en.
