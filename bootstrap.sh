@@ -7,7 +7,6 @@ create() {
     local storage_account_name="$2"
     local container_name="$3"
     local location="$4"
-    local subscription_id="$5"
 
     # Create resource group
     az group create \
@@ -83,12 +82,7 @@ main() {
     storage_account_name="tfstate$RANDOM"
 
     if [[ "$1" == "create" ]]; then
-        if [[ -z "$2" ]]; then
-            echo "Usage: $0 create <subscription_id>"
-            exit 1
-        else
-            create "$resource_group_name" "$storage_account_name" "$container_name" "$location" "$2"
-        fi
+        create "$resource_group_name" "$storage_account_name" "$container_name" "$location"
     elif [[ "$1" == "delete" ]]; then
         delete "$resource_group_name" "$storage_account_name" "$container_name"
     else

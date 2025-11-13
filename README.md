@@ -286,20 +286,21 @@ Det vil da kjøre en siste jobb som sletter ressursene som ble laget i Azure.
 
 Du kan sjekke logger i GitHub Actions for å se at det fungerer!
 
-
 # 🤓 Setup for spesielt interesserte (ikke en del av workshop'en)
 
 1. Få tak i en Azure subscription. Pass på at provider `Microsoft.App` er registrert i subscription'en din.
    Se [her](https://learn.microsoft.com/en-us/azure/azure-resource-manager/troubleshooting/error-register-resource-provider?tabs=azure-cli) for mer informasjon,
    og evt. kjør kommandoen `az provider register --namespace Microsoft.App` for å registrere den.
 
-2. Lag en ny Storage Account i Azure for å lagre Terraform state.
-   Bruk skriptet `bootstrap.sh` for å sette opp en ny Storage Account, som vil lages i resource group `tfstate`.
+1. Autentiser deg mot Azure fra terminalen din ved å kjøre `az login`. Velg riktig subscription.
 
-3. Lag en App Registration i Entra ID manuelt, og pek den mot riktig GitHub repository/environment,
+1. Lag en ny Storage Account i Azure for å lagre Terraform state, ved hjelp av skriptet `bootstrap.sh`.
+   En ny Storage Account vil da lages i resource group `tfstate`.
+
+1. Lag en App Registration i Entra ID manuelt, og pek den mot riktig GitHub repository/environment,
    se [her](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure) for mer informasjon.
    Du kan bruke `prod` som environment, det er det som brukes i `.github/workflows/deploy.yml`.
    Gi den `Contributor`-tilgang til subscription'en din.
 
-4. Hent ut client ID fra App Registration og legg den i GitHub repository variables under `ARM_CLIENT_ID`.
+1. Hent ut client ID fra App Registration og legg den i GitHub repository variables under `ARM_CLIENT_ID`.
    Hent også ut subscription ID og tentant ID og legg de i GitHub repository variables under `ARM_SUBSCRIPTION_ID` og `ARM_TENANT_ID`.
