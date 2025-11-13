@@ -53,7 +53,7 @@ Nå skal du kunne gå i nettleseren og se noe på [http://localhost:3000](http:/
 
 # ▶️ 2. GitHub Actions
 
-Disse oppgavene gjøres i filen [deploy.yml](.github/workflows/deploy.yml).
+Disse oppgavene gjøres i filen [deploy.yaml](.github/workflows/deploy.yaml).
 
 ## 📖 Før du begynner
 
@@ -305,7 +305,7 @@ az provider register --namespace Microsoft.App
 
 1. Lag en App Registration i Entra ID manuelt, og pek den mot riktig GitHub repository/environment,
    se [her](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure) for mer informasjon.
-   Du kan bruke `prod` som environment, det er det som brukes i `.github/workflows/deploy.yml`.
+   Du kan bruke `prod` som environment, det er det som brukes i `.github/workflows/deploy.yaml`.
    Gi den `Contributor`-tilgang til subscription'en din.
 
 1. Hent ut client ID fra App Registration og legg den i GitHub repository variables under `ARM_CLIENT_ID`.

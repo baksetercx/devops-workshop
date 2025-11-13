@@ -1,4 +1,4 @@
-name: 'Destroy Terraform resources'
+name: Destroy Terraform resources
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   destroy:
-    name: 'Destroy Terraform resources'
+    name: Destroy Terraform resources
     runs-on: ubuntu-latest
     env:
       TF_VAR_revision_suffix: ${{ github.sha }}
@@ -26,7 +26,7 @@ jobs:
         working-directory: 'terraform'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -36,7 +36,7 @@ jobs:
 
       - name: Destroy resources and delete workspace
         run: |
-          (terraform workspace select $TF_VAR_my_name && \
+          (terraform workspace select "$TF_VAR_my_name" && \
            terraform destroy -auto-approve && \
            terraform workspace select default && \
-           terraform workspace delete $TF_VAR_my_name) || echo "No workspace to destroy"
+           terraform workspace delete "$TF_VAR_my_name") || echo 'No workspace to destroy.'

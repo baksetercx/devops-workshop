@@ -1,4 +1,4 @@
-name: 'Deploy'
+name: Deploy
 
 on:
   pull_request:
@@ -6,19 +6,19 @@ on:
 
 jobs:
   run-tests:
-    name: 'Run frontend tests'
+    name: Run frontend tests
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: 'frontend'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # legg til steg her:
 
   build:
-    name: 'Build Docker image and push to registry'
+    name: Build Docker image and push to registry
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -38,14 +38,14 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build and push image to registry
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           push: 'true'
           tags: 'ghcr.io/${{ github.repository }}/${{ github.head_ref }}:latest'
           context: 'frontend'
 
   deploy:
-    name: 'Deploy using Terraform'
+    name: Deploy using Terraform
     runs-on: ubuntu-latest
     needs: [build]
     env:
@@ -65,7 +65,7 @@ jobs:
         working-directory: 'terraform'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -74,7 +74,7 @@ jobs:
         run: terraform init
 
       - name: Set Terraform workspace
-        run: terraform workspace new $TF_VAR_my_name || terraform workspace select $TF_VAR_my_name
+        run: terraform workspace new "$TF_VAR_my_name" || terraform workspace select "$TF_VAR_my_name"
 
       - name: Run Terraform plan
         run: terraform plan
