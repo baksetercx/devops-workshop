@@ -30,7 +30,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 3.0"
+      version = "~> 4.0"
     }
   }
 
@@ -79,7 +79,7 @@ main() {
     local location='norwayeast'
 
     local storage_account_name
-    storage_account_name="tfstate$RANDOM"
+    storage_account_name="tfstate$RANDOM$RANDOM$RANDOM"
 
     if [[ "$1" == "create" ]]; then
         create "$resource_group_name" "$storage_account_name" "$container_name" "$location"

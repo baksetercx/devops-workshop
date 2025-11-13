@@ -4,6 +4,6 @@
     "test": "echo \"Running tests...\" && sleep 2 && echo \"All tests passing!\""
   },
   "dependencies": {
-    "serve": "14.2.3"
+    "serve": "14.2.5"
   }
 }

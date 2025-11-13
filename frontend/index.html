@@ -1,1 +1,198 @@
-hei
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>DevOps Workshop Demo App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Tailwind via CDN (no build step) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Optional: small Tailwind config for custom colors -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            workshop: {
+              bg: "#050816",
+              card: "#0f172a",
+              accent: "#38bdf8",
+              accentSoft: "#0ea5e9",
+            },
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 antialiased">
+  <div class="relative min-h-screen flex items-center justify-center px-4 py-10">
+    <!-- Glow / decoration -->
+    <div class="pointer-events-none absolute inset-0 overflow-hidden">
+      <div class="absolute -top-40 -left-32 h-72 w-72 rounded-full bg-cyan-500/10 blur-3xl"></div>
+      <div class="absolute -bottom-40 -right-32 h-72 w-72 rounded-full bg-indigo-500/10 blur-3xl"></div>
+    </div>
+
+    <main class="relative max-w-5xl w-full mx-auto">
+      <!-- Top bar -->
+      <header class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+        <div>
+          <div class="inline-flex items-center gap-2 rounded-full bg-slate-900/60 border border-slate-700/60 px-3 py-1 text-xs font-medium text-slate-300">
+            <span class="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Container running: <span class="font-semibold text-emerald-400 ml-1">devops-workshop-demo</span>
+          </div>
+          <h1 class="mt-4 text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight">
+            DevOps Workshop
+            <span class="block bg-gradient-to-r from-cyan-400 via-sky-500 to-indigo-400 bg-clip-text text-transparent">
+              Demo Frontend
+            </span>
+          </h1>
+          <p class="mt-3 max-w-xl text-sm sm:text-base text-slate-300">
+            This app is just for practice. If you can see this, your Docker container is
+            <span class="font-semibold text-emerald-400">built</span>, 
+            <span class="font-semibold text-sky-400">running</span>, and 
+            <span class="font-semibold text-indigo-400">exposed</span> correctly.
+          </p>
+        </div>
+
+        <div class="flex flex-col items-start sm:items-end gap-3">
+          <div class="inline-flex items-center gap-2 rounded-xl bg-slate-900/70 border border-slate-700/70 px-3 py-2 text-xs sm:text-sm">
+            <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-300 border border-emerald-500/40 text-[11px] font-mono">
+              v1.0.0
+            </span>
+            <span class="hidden sm:inline text-slate-300">Dockerized &amp; ready to ship</span>
+            <span class="sm:hidden text-slate-300">Ready to ship</span>
+          </div>
+          <button
+            class="inline-flex items-center justify-center gap-2 rounded-xl border border-cyan-400/80 bg-gradient-to-r from-cyan-500/20 via-sky-500/10 to-indigo-500/20 px-4 py-2 text-xs sm:text-sm font-medium tracking-wide text-cyan-100 shadow-lg shadow-cyan-500/20 hover:shadow-cyan-400/40 hover:-translate-y-[1px] transition-all duration-150"
+          >
+            <span class="inline-block h-2 w-2 rounded-full bg-cyan-400"></span>
+            Demo UI – no backend
+          </button>
+        </div>
+      </header>
+
+      <!-- Content grid -->
+      <section class="grid gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)]">
+        <!-- Left: Cards -->
+        <div class="space-y-6">
+          <!-- Status cards -->
+          <div class="grid gap-4 sm:grid-cols-3">
+            <div class="rounded-2xl border border-slate-700/70 bg-slate-900/70 px-4 py-3 shadow-lg shadow-black/40">
+              <p class="text-xs uppercase tracking-wide text-slate-400 mb-1">Container</p>
+              <p class="text-sm font-semibold text-slate-50">devops-demo-frontend</p>
+              <p class="mt-3 flex items-center gap-2 text-xs text-slate-300">
+                <span class="inline-block h-2 w-2 rounded-full bg-emerald-400"></span>
+                Status:
+                <span class="font-semibold text-emerald-400">Running</span>
+              </p>
+            </div>
+
+            <div class="rounded-2xl border border-slate-700/70 bg-slate-900/70 px-4 py-3 shadow-lg shadow-black/40">
+              <p class="text-xs uppercase tracking-wide text-slate-400 mb-1">Image</p>
+              <p class="text-sm font-semibold text-slate-50">workshop/frontend:latest</p>
+              <p class="mt-3 text-xs text-slate-300 font-mono break-all">
+                Built from <span class="text-sky-400">Dockerfile</span>
+              </p>
+            </div>
+
+            <div class="rounded-2xl border border-slate-700/70 bg-slate-900/70 px-4 py-3 shadow-lg shadow-black/40">
+              <p class="text-xs uppercase tracking-wide text-slate-400 mb-1">Port</p>
+              <p class="text-sm font-semibold text-slate-50">http://localhost:8080</p>
+              <p class="mt-3 text-xs text-slate-300">
+                Mapped from container port <span class="font-mono text-indigo-300">80</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Environment panel -->
+          <div class="rounded-3xl border border-slate-700/70 bg-slate-900/80 p-5 shadow-xl shadow-black/40">
+            <div class="flex items-center justify-between gap-3 mb-3">
+              <div>
+                <h2 class="text-sm font-semibold text-slate-100">Environment overview</h2>
+                <p class="text-xs text-slate-400">
+                  These are <span class="font-semibold text-slate-200">fake</span> values for workshop purposes.
+                </p>
+              </div>
+              <span class="rounded-full bg-slate-800/80 px-3 py-1 text-[10px] font-mono uppercase tracking-wide text-slate-300 border border-slate-700">
+                MODE: <span class="text-emerald-400">DOCKER-WORKSHOP</span>
+              </span>
+            </div>
+
+            <div class="grid gap-3 sm:grid-cols-3 text-xs font-mono">
+              <div class="rounded-2xl bg-slate-950/40 border border-slate-800/80 p-3">
+                <p class="text-[11px] text-slate-400 mb-1">APP_ENV</p>
+                <p class="text-sky-300">"workshop"</p>
+              </div>
+              <div class="rounded-2xl bg-slate-950/40 border border-slate-800/80 p-3">
+                <p class="text-[11px] text-slate-400 mb-1">APP_VERSION</p>
+                <p class="text-emerald-300">"1.0.0"</p>
+              </div>
+              <div class="rounded-2xl bg-slate-950/40 border border-slate-800/80 p-3">
+                <p class="text-[11px] text-slate-400 mb-1">APP_PORT</p>
+                <p class="text-indigo-300">"80"</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Fake logs -->
+        <aside class="rounded-3xl border border-slate-700/70 bg-slate-950/80 p-4 sm:p-5 shadow-xl shadow-black/40 flex flex-col h-full">
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="text-sm font-semibold text-slate-100 flex items-center gap-2">
+              <span class="inline-flex h-6 w-6 items-center justify-center rounded-xl bg-slate-800/80 border border-slate-700/80 text-[11px] font-mono">
+                LOG
+              </span>
+              Container logs
+            </h2>
+            <div class="flex items-center gap-1.5">
+              <span class="inline-flex h-2 w-2 rounded-full bg-emerald-400"></span>
+              <span class="text-[11px] text-slate-400 font-mono">live</span>
+            </div>
+          </div>
+
+          <div class="relative flex-1 rounded-2xl bg-slate-950/90 border border-slate-800/80 p-3 overflow-hidden">
+            <div class="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-slate-950 to-transparent pointer-events-none"></div>
+            <div class="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-slate-950 to-transparent pointer-events-none"></div>
+
+            <pre class="relative mt-2 max-h-64 overflow-y-auto text-[11px] leading-relaxed text-slate-300 font-mono">
+<span class="text-slate-500">[docker] </span><span class="text-emerald-400">INFO </span> Building image <span class="text-sky-400">workshop/frontend:latest</span>...
+<span class="text-slate-500">[docker] </span><span class="text-emerald-400">INFO </span> Step 1/5 : FROM <span class="text-indigo-300">nginx:alpine</span>
+<span class="text-slate-500">[docker] </span><span class="text-emerald-400">INFO </span> Step 2/5 : COPY <span class="text-sky-300">./dist</span> /usr/share/nginx/html
+<span class="text-slate-500">[docker] </span><span class="text-emerald-400">INFO </span> Step 3/5 : EXPOSE <span class="text-indigo-300">80</span>
+<span class="text-slate-500">[docker] </span><span class="text-emerald-400">INFO </span> Step 4/5 : HEALTHCHECK --interval=30s CMD curl -f http://localhost || exit 1
+<span class="text-slate-500">[docker] </span><span class="text-emerald-400">INFO </span> Step 5/5 : CMD ["nginx", "-g", "daemon off;"]
+<span class="text-slate-500">[docker] </span><span class="text-emerald-400">INFO </span> Successfully tagged <span class="text-sky-400">workshop/frontend:latest</span>
+
+<span class="text-slate-500">[container] </span><span class="text-emerald-400">READY</span> Listening on <span class="text-indigo-300">0.0.0.0:80</span>
+<span class="text-slate-500">[container] </span><span class="text-cyan-300">NOTE </span> This is a static demo. No backend calls are being made.
+<span class="text-slate-500">[container] </span><span class="text-cyan-300">TIP  </span> Try rebuilding the image, changing this HTML, or mapping to another port.
+            </pre>
+          </div>
+
+          <p class="mt-4 text-[11px] text-slate-500">
+            Hint for the workshop:
+            <span class="text-slate-300">
+              edit <code class="px-1 py-0.5 rounded bg-slate-900/80 border border-slate-700">index.html</code>,
+              rebuild your image, and refresh this page to see your changes.
+            </span>
+          </p>
+        </aside>
+      </section>
+
+      <!-- Footer -->
+      <footer class="mt-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[11px] text-slate-500">
+        <p>
+          Built with
+          <span class="text-sky-400 font-semibold">Tailwind CSS</span>
+          via CDN – no extra tooling required.
+        </p>
+        <p class="font-mono">
+          docker run -p <span class="text-emerald-400">8080:80</span> workshop/frontend
+        </p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>

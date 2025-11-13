@@ -289,8 +289,14 @@ Du kan sjekke logger i GitHub Actions for å se at det fungerer!
 # 🤓 Setup for spesielt interesserte (ikke en del av workshop'en)
 
 1. Få tak i en Azure subscription. Pass på at provider `Microsoft.App` er registrert i subscription'en din.
-   Se [her](https://learn.microsoft.com/en-us/azure/azure-resource-manager/troubleshooting/error-register-resource-provider?tabs=azure-cli) for mer informasjon,
-   og evt. kjør kommandoen `az provider register --namespace Microsoft.App` for å registrere den.
+   Se [her](https://learn.microsoft.com/en-us/azure/azure-resource-manager/troubleshooting/error-register-resource-provider?tabs=azure-cli) for mer informasjon.
+
+1. Pass på at alle providers er registrert:
+
+```bash
+az provider register --namespace Microsoft.Storage
+az provider register --namespace Microsoft.App
+```
 
 1. Autentiser deg mot Azure fra terminalen din ved å kjøre `az login`. Velg riktig subscription.
 
