@@ -6,16 +6,20 @@ on:
 
 jobs:
   run-tests:
-    name: Run frontend tests
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: 'frontend'
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
+  name: Run frontend tests
+  runs-on: ubuntu-latest
+  defaults:
+    run:
+      working-directory: "frontend"
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v5
 
-      # legg til steg her:
+    - name: Install dependencies
+      run: yarn install
+
+    - name: Run tests
+      run: yarn test
 
   build:
     name: Build Docker image and push to registry
@@ -30,7 +34,7 @@ jobs:
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
-          registry: 'ghcr.io'
+          registry: "ghcr.io"
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
@@ -40,9 +44,9 @@ jobs:
       - name: Build and push image to registry
         uses: docker/build-push-action@v6
         with:
-          push: 'true'
-          tags: 'ghcr.io/${{ github.repository }}/${{ github.head_ref }}:latest'
-          context: 'frontend'
+          push: "true"
+          tags: "ghcr.io/${{ github.repository }}/${{ github.head_ref }}:latest"
+          context: "frontend"
 
   deploy:
     name: Deploy using Terraform
@@ -55,14 +59,14 @@ jobs:
       ARM_CLIENT_ID: ${{ vars.ARM_CLIENT_ID }}
       ARM_SUBSCRIPTION_ID: ${{ vars.ARM_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ vars.ARM_TENANT_ID }}
-      ARM_USE_OIDC: 'true'
+      ARM_USE_OIDC: "true"
     permissions:
       contents: read
       id-token: write
     environment: prod
     defaults:
       run:
-        working-directory: 'terraform'
+        working-directory: "terraform"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
