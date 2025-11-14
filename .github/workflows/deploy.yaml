@@ -6,20 +6,20 @@ on:
 
 jobs:
   run-tests:
-  name: Run frontend tests
-  runs-on: ubuntu-latest
-  defaults:
-    run:
-      working-directory: "frontend"
-  steps:
-    - name: Checkout repository
-      uses: actions/checkout@v5
+    name: Run frontend tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "frontend"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
 
-    - name: Install dependencies
-      run: yarn install
+      - name: Install dependencies
+        run: yarn install
 
-    - name: Run tests
-      run: yarn test
+      - name: Run tests
+        run: yarn test
 
   build:
     name: Build Docker image and push to registry
