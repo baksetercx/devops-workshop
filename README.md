@@ -293,10 +293,10 @@ Du kan sjekke logger i GitHub Actions for å se at det fungerer!
 
 1. Pass på at alle providers er registrert:
 
-```bash
-az provider register --namespace Microsoft.Storage
-az provider register --namespace Microsoft.App
-```
+   ```bash
+   az provider register --namespace Microsoft.Storage
+   az provider register --namespace Microsoft.App
+   ```
 
 1. Autentiser deg mot Azure fra terminalen din ved å kjøre `az login`. Velg riktig subscription.
 
