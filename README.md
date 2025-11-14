@@ -1,6 +1,6 @@
 # devops-workshop
 
-Lær hvordan du [deployer](https://teknisk-ordbok.fly.dev/ordbok/Deploy) koden din til [prod](https://teknisk-ordbok.fly.dev/ordbok/Produksjon)!
+Hvordan [deploye](https://teknisk-ordbok.fly.dev/ordbok/Deploy) til [prod](https://teknisk-ordbok.fly.dev/ordbok/Produksjon)
 
 # 🐳 1. Docker
 
@@ -92,15 +92,15 @@ Det er bare å pushe til branchen din og se om det fungerer underveis!
   <summary>✨ Se fasit</summary>
 
 ```yaml
-run_tests:
-  name: 'Run frontend tests'
+run-tests:
+  name: Run frontend tests
   runs-on: ubuntu-latest
   defaults:
     run:
-      working-directory: './frontend'
+      working-directory: 'frontend'
   steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     # legger til disse stegene:
     - name: Install dependencies
@@ -129,7 +129,7 @@ Dobbeltsjekk til slutt at bygg-steget kjører etter test-steget ved å se på **
 
 ```yaml
 build:
-  name: 'Build Docker image and push to registry'
+  name: Build Docker image and push to registry
   needs: [run-tests] # legger til denne linjen
   runs-on: ubuntu-latest
   permissions:
@@ -137,7 +137,7 @@ build:
     packages: write
   steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: Login to GitHub Container Registry
       uses: docker/login-action@v3
@@ -150,7 +150,7 @@ build:
       uses: docker/setup-buildx-action@v3
 
     - name: Build and push image to registry
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v6
       with:
         push: 'true'
         tags: 'ghcr.io/${{ github.repository }}/${{ github.head_ref }}:latest'
@@ -234,7 +234,7 @@ eller kjør `terraform -help` i terminalen dersom du har Terraform installert lo
 
 ```yaml
 deploy:
-  name: 'Deploy using Terraform'
+  name: Deploy using Terraform
   runs-on: ubuntu-latest
   needs: [build]
   env:
@@ -254,7 +254,7 @@ deploy:
       working-directory: 'terraform'
   steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
